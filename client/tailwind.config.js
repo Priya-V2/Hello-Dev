@@ -1,8 +1,21 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  theme: {
-    extend: {},
+export const content = ["./src/**/*.{js,jsx,ts,tsx}"];
+export const theme = {
+  extend: {
+    colors: {
+      indigo: "#201e43",
+      "neon-green": "#39FF14",
+      alabaster: "#f5f5f5",
+      "dark-charcoal": "#333",
+    },
+    fontFamily: {
+      roboto: ["Roboto", "sans-serif"],
+      league: ["League Spartan", "sans-serif"],
+      quicksand: ["Quicksand", "sans-serif"],
+    },
+    spacing: {
+      "6px": "6px",
+    },
   },
-  plugins: [],
 };
+export const plugins = [];
