@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Header({ font }) {
+function Header() {
   const [isSearchOnFocus, setIsSearchOnFocus] = useState(false);
   const [menuDisplay, setMenuDisplay] = useState(false);
 
@@ -16,7 +16,7 @@ function Header({ font }) {
   return (
     <div>
       <nav
-        className={`grid ${gridSettings} text-white bg-indigo font-roboto font-medium text-xs sm:text-sm md:text-base lg:px-6 sm:px-3 px-2 md:py-3 py-2  border-y-2`}
+        className={`grid ${gridSettings} text-white bg-midnight-indigo font-roboto font-medium text-xs sm:text-sm md:text-base lg:px-6 sm:px-3 px-2 md:py-3 py-2  border-y-2`}
       >
         <div className="self-center justify-self-start flex gap-2">
           <Link to="/">
@@ -64,7 +64,7 @@ function Header({ font }) {
             </li>
 
             <Link to="/signin">
-              <li className="bg-neon-green px-4 text-indigo py-6px rounded">
+              <li className="bg-neon-green px-4 text-midnight-indigo py-6px rounded">
                 Sign in
               </li>
             </Link>
@@ -76,7 +76,7 @@ function Header({ font }) {
         </div>
       </nav>
       <div
-        className={`menu-container fixed top-0 left-0 w-full h-full bg-indigo text-white text-base transition-transform duration-300 ease-in-out ${
+        className={`menu-container fixed top-0 left-0 w-full h-full bg-midnight-indigo text-white text-base transition-transform duration-300 ease-in-out ${
           menuDisplay
             ? "translate-x-0 opacity-100"
             : "-translate-x-full opacity-0"
