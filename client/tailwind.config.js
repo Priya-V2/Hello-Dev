@@ -6,8 +6,11 @@ export const theme = {
       alabaster: "#f5f5f5",
       "dark-charcoal": "#333",
       "neon-green": "#39FF14",
+      "neon-green-tint": "#9cff8a",
       "cool-blue": "#1E90FF",
       "midnight-indigo": "#201e43",
+      "fail-red": "#D32F2F",
+      "fail-red-tint": "#fbeaea",
     },
     fontFamily: {
       roboto: ["Roboto", "sans-serif"],

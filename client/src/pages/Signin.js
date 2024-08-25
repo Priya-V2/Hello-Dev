@@ -52,7 +52,7 @@ export default function Signin() {
             </button>
             <div className="flex gap-1">
               <p>Already have an account?</p>
-              <Link to={"/signup"}>
+              <Link to={"/sign-up"}>
                 <span className="text-cool-blue">Sign up</span>
               </Link>
             </div>
