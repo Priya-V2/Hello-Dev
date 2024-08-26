@@ -7,6 +7,7 @@ import Topics from "./pages/Topics";
 import User from "./pages/User";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import Footer from "./Component/Footer";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/sign-up" element={<Signup />}></Route>
         <Route path="/user" element={<User />}></Route>
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
