@@ -1,10 +1,16 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../redux/user/userSlice";
 
 export default function Signin() {
+  const { loading, errorMessage } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
   const ctaColor = loading ? "bg-neon-green-tint" : "bg-neon-green";
   const navigate = useNavigate();
 
@@ -15,29 +21,29 @@ export default function Signin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      setErrorMessage("Please fill out all the fields");
+      return dispatch(signInFailure("Please fill out all the fields"));
     }
     try {
-      setLoading(true);
-      setErrorMessage(null);
+      dispatch(signInStart());
       const res = await fetch("api/auth/sign-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+
       const data = await res.json();
-      console.log(data);
+
       if (data.success === false) {
-        setErrorMessage(data.message);
+        return dispatch(signInFailure(data.message));
       }
-      setLoading(false);
+
       if (res.ok) {
+        dispatch(signInSuccess(data));
         return navigate("/");
       }
     } catch (error) {
       console.error("Error during submission:", error.errorMessage);
-      setErrorMessage(error.message);
-      setLoading(false);
+      return dispatch(signInFailure(error.message));
     }
   };
 
