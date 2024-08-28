@@ -63,7 +63,7 @@ function Header() {
               />
             </li>
 
-            <Link to="/signin">
+            <Link to="/sign-in">
               <li className="bg-neon-green px-4 text-midnight-indigo py-6px rounded">
                 Sign in
               </li>
@@ -103,7 +103,7 @@ function Header() {
               Topics
             </li>
           </Link>
-          <Link to="/signin">
+          <Link to="/sign-in">
             <li>Sign in</li>
           </Link>
         </ul>
