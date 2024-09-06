@@ -1,8 +1,9 @@
 import bcryptjs from "bcryptjs";
-import User from "../models/user.model.js";
-import { errorHandler } from "../utils/error.js";
+import passport from "passport";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import User from "../models/user.model.js";
+import { errorHandler } from "../utils/error.js";
 
 const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -61,4 +62,30 @@ const signin = async (req, res, next) => {
   }
 };
 
-export { signup, signin };
+const googleLogin = passport.authenticate("google", {
+  scope: ["profile", "email"],
+});
+
+const googleCallback = passport.authenticate("google", {
+  failureRedirect: "/",
+});
+
+const googleRedirect = (req, res) => {
+  res.redirect("http://localhost:3000/");
+};
+
+const userProfile = (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/api/auth/google");
+  }
+  res.send(`<h1>Hello, ${req.user.username}</h1>`);
+};
+
+export {
+  signup,
+  signin,
+  googleLogin,
+  googleCallback,
+  googleRedirect,
+  userProfile,
+};

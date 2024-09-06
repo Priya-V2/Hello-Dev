@@ -6,6 +6,7 @@ import {
   signInStart,
   signInSuccess,
 } from "../redux/user/userSlice";
+import Oauth from "../Component/Oauth";
 
 export default function Signin() {
   const { loading, errorMessage } = useSelector((store) => store.user);
@@ -107,14 +108,7 @@ export default function Signin() {
                 "Sign In"
               )}
             </button>
-            <button className="flex gap-1 justify-center font-medium w-full p-1.5 mb-4 border border-midnight-indigo hover:shadow-custom-indigo rounded">
-              <img
-                src="images/google.png"
-                alt="Google logo"
-                className="w-6 h-6"
-              />
-              <span>Google</span>
-            </button>
+            <Oauth />
             <div className="flex gap-1">
               <span>Don&apos;t have an account?</span>
               <Link to={"/sign-up"}>
