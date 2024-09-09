@@ -1,7 +1,6 @@
 import bcryptjs from "bcryptjs";
 import passport from "passport";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 
@@ -66,26 +65,62 @@ const googleLogin = passport.authenticate("google", {
   scope: ["profile", "email"],
 });
 
-const googleCallback = passport.authenticate("google", {
-  failureRedirect: "/",
-});
+const googleCallback = (req, res) => {
+  passport.authenticate("google", { session: false }, (err, user) => {
+    if (err || !user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Authentication failed" });
+    }
 
-const googleRedirect = (req, res) => {
-  res.redirect("http://localhost:3000/");
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "2d",
+    });
+
+    res.cookie("access_token", token, {
+      httpOnly: true,
+    });
+
+    res.redirect("http://localhost:3000/auth/google/Callback");
+  })(req, res);
 };
 
-const userProfile = (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.redirect("/api/auth/google");
+const checkAuth = (req, res) => {
+  const token = req.cookies.access_token;
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ success: false, message: "No token provided" });
   }
-  res.send(`<h1>Hello, ${req.user.username}</h1>`);
+
+  try {
+    // Verify the JWT token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!decoded || !decoded.id) {
+      return res.status(401).json({ success: false, message: "Invalid token" });
+    }
+
+    // Find the user based on the token ID
+    User.findById(decoded.id)
+      .then((user) => {
+        if (!user) {
+          return res
+            .status(404)
+            .json({ success: false, message: "User not found" });
+        }
+        res.status(200).json({ success: true, user });
+      })
+      .catch((error) => {
+        res
+          .status(500)
+          .json({ success: false, message: "Server error", error });
+      });
+  } catch (error) {
+    res
+      .status(401)
+      .json({ success: false, message: "Token verification failed", error });
+  }
 };
 
-export {
-  signup,
-  signin,
-  googleLogin,
-  googleCallback,
-  googleRedirect,
-  userProfile,
-};
+export { signup, signin, googleLogin, googleCallback, checkAuth };

@@ -4,8 +4,7 @@ import {
   signup,
   googleLogin,
   googleCallback,
-  googleRedirect,
-  userProfile,
+  checkAuth,
 } from "../controllers/auth.controller.js";
 import passport from "passport";
 
@@ -16,8 +15,9 @@ router.post("/sign-up", signup);
 router.post("/sign-in", signin);
 
 // Google OAuth routes
+
 router.get("/google", googleLogin);
-router.get("/google/callback", googleCallback, googleRedirect);
-router.get("/profile", userProfile);
+router.get("/google/callback", googleCallback);
+router.get("/check", checkAuth);
 
 export default router;

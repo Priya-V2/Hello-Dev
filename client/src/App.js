@@ -8,6 +8,7 @@ import User from "./pages/User";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Footer from "./Component/Footer";
+import OAuthCallbackHandler from "./Component/OAuthCallbackHandler";
 
 function App() {
   return (
@@ -20,6 +21,10 @@ function App() {
         <Route path="/search" element={<Search />}></Route>
         <Route path="/sign-in" element={<Signin />}></Route>
         <Route path="/sign-up" element={<Signup />}></Route>
+        <Route
+          path="/auth/google/callback"
+          element={<OAuthCallbackHandler />}
+        ></Route>
         <Route path="/user" element={<User />}></Route>
       </Routes>
       <Footer />

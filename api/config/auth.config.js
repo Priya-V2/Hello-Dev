@@ -1,4 +1,3 @@
-// auth.config.js
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import dotenv from "dotenv";
@@ -12,7 +11,7 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback",
+      callbackURL: "http://localhost:5000/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -22,6 +21,7 @@ passport.use(
             googleId: profile.id,
             username: profile.displayName,
             email: profile.emails[0].value,
+            profilePicture: profile._json.picture,
           });
           await user.save();
         } else if (!user.googleId) {
