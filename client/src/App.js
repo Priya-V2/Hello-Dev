@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Footer from "./Component/Footer";
 import OAuthCallbackHandler from "./Component/OAuthCallbackHandler";
 import Dashboard from "./pages/Dashboard";
+import PrivateRoute from "./Component/PrivateRoute";
 
 function App() {
   return (
@@ -22,11 +23,13 @@ function App() {
         <Route path="/search" element={<Search />}></Route>
         <Route path="/sign-in" element={<Signin />}></Route>
         <Route path="/sign-up" element={<Signup />}></Route>
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />}></Route>
+        </Route>
         <Route
           path="/auth/google/callback"
           element={<OAuthCallbackHandler />}
         ></Route>
-        <Route path="/dashboard" element={<Dashboard />}></Route>
         <Route path="/user" element={<User />}></Route>
       </Routes>
       <Footer />
