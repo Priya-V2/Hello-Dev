@@ -9,6 +9,7 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Footer from "./Component/Footer";
 import OAuthCallbackHandler from "./Component/OAuthCallbackHandler";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           path="/auth/google/callback"
           element={<OAuthCallbackHandler />}
         ></Route>
+        <Route path="/dashboard" element={<Dashboard />}></Route>
         <Route path="/user" element={<User />}></Route>
       </Routes>
       <Footer />

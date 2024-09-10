@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Header() {
   const [isSearchOnFocus, setIsSearchOnFocus] = useState(false);
   const [menuDisplay, setMenuDisplay] = useState(false);
+  const [dropDownDisplay, setDropDownDisplay] = useState(false);
+  const { currentUser } = useSelector((store) => store.user);
 
   const toggleMenu = () => {
     setMenuDisplay((prevState) => !prevState);
+  };
+  const toggleDropdown = () => {
+    setDropDownDisplay((prevState) => !prevState);
   };
 
   const gridSettings = isSearchOnFocus
@@ -63,18 +69,70 @@ function Header() {
               />
             </li>
 
-            <Link to="/sign-in">
-              <li className="bg-neon-green px-4 text-midnight-indigo py-6px rounded">
-                Sign in
+            {currentUser ? (
+              <li className="flex items-center">
+                <button
+                  type="button"
+                  className="flex items-center"
+                  onClick={() => toggleDropdown()}
+                >
+                  {currentUser.profilePicture ? (
+                    <img
+                      src={currentUser.profilePicture}
+                      alt="profile img"
+                      className="w-8 h-8 rounded-full"
+                    />
+                  ) : (
+                    <img
+                      src="/images/user.png"
+                      alt="profile img"
+                      className="w-8 h-8 p-1 border rounded-full "
+                    />
+                  )}
+                </button>
               </li>
-            </Link>
+            ) : (
+              <li className="bg-neon-green px-4 text-midnight-indigo py-6px rounded ">
+                <Link to="/sign-in">Sign in</Link>
+              </li>
+            )}
 
-            <button className="sm:hidden" onClick={() => toggleMenu()}>
-              <img src="/images/menu.png" alt="Menu icon" className="w-4" />
-            </button>
+            <li className="flex items-center sm:hidden">
+              <button onClick={() => toggleMenu()}>
+                <img src="/images/menu.png" alt="Menu icon" className="w-4" />
+              </button>
+            </li>
           </ul>
         </div>
       </nav>
+      <div
+        className={`${
+          dropDownDisplay ? "absolute" : "hidden"
+        } top-13 right-10 md:top-14 sm:right-4 text-dark-charcoal text-sm bg-white border-2 border-dark-charcoal rounded min-h-3 hover:shadow-custom-indigo`}
+      >
+        <div
+          className="flex gap-2 items-center p-3 hover:bg-neutral-200 "
+          onClick={() => setDropDownDisplay()}
+        >
+          <img
+            src="/images/user-dark-charcoal.png"
+            alt="Profile image"
+            className="w-5 h-5"
+          />
+          <Link to="/dashboard?tab=profile">Profile</Link>
+        </div>
+        <hr className="mx-3 border-b border-neutral-400" />
+        <div className="flex gap-2 items-center p-3 hover:bg-neutral-200">
+          <img
+            src="/images/sign-out.png"
+            alt="sign-out image"
+            className="w-5 h-5"
+          />
+          <a href="#" onClick={() => setDropDownDisplay()}>
+            Sign out
+          </a>
+        </div>
+      </div>
       <div
         className={`menu-container fixed top-0 left-0 w-full h-full bg-midnight-indigo text-white text-base transition-transform duration-300 ease-in-out ${
           menuDisplay
@@ -103,7 +161,7 @@ function Header() {
               Topics
             </li>
           </Link>
-          <Link to="/sign-in">
+          <Link to="/sign-in" onClick={() => toggleMenu()}>
             <li>Sign in</li>
           </Link>
         </ul>
