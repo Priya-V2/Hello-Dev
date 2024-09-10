@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function DashSidebar() {
   return (
     <div>
-      <div className="font-roboto w-full md:w-56 text-dark-charcoal bg-midnight-indigo min-h-screen border-b-2 p-2 pt-3 rounded-sm">
+      <div className="font-roboto w-full md:w-56 text-dark-charcoal bg-midnight-indigo min-h-max md:min-h-screen border-b-2 p-4 md:p-2 md:pt-3 rounded-sm">
         <div className="flex items-center gap-3 bg-alabaster mb-2 p-2 rounded cursor-pointer">
           <img
             src="/images/user-dark-charcoal.png"
