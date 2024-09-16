@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
@@ -9,6 +9,11 @@ import {
 import { app } from "../firebase.js";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import {
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess,
+} from "../redux/user/userSlice.js";
 
 export default function DashProfile() {
   const { currentUser, loading } = useSelector((store) => store.user);
@@ -16,7 +21,17 @@ export default function DashProfile() {
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
+  const [formData, setFormData] = useState({});
+  const ctaChanges =
+    loading || imageFileUploading
+      ? "bg-neon-green-tint cursor-not-allowed"
+      : "bg-neon-green";
   const filePickerRef = useRef();
+  const dispatch = useDispatch();
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -31,7 +46,8 @@ export default function DashProfile() {
     }
   }, [imageFile]);
 
-  const uploadImage = () => {
+  const uploadImage = async () => {
+    setImageFileUploading(true);
     setImageFileUploadError(null);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
@@ -52,19 +68,60 @@ export default function DashProfile() {
         setImageFileUploadProgress(null);
         setImageFile(null);
         setImageFileUrl(null);
+        setImageFileUploading(false);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileUrl(downloadURL);
+          setImageFileUploading(false);
+          setImageFileUploadProgress(null);
+          setFormData({ ...formData, profilePicture: downloadURL });
         });
       }
     );
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUpdateSuccess(null);
+    setUpdateError(null);
+    if (Object.keys(formData).length === 0) {
+      setUpdateError("No changes made");
+      return;
+    }
+    if (imageFileUploading) {
+      setUpdateError("Please wait for image to upload");
+    }
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        dispatch(updateUserFailure(data.message));
+        setUpdateError(data.message);
+      } else {
+        dispatch(updateUserSuccess(data));
+        setUpdateSuccess("User's profile updated successfully");
+        setFormData({ ...formData, password: "" });
+      }
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+      setUpdateError(error.message);
+    }
+  };
   return (
-    <div className="font-roboto text-base text-dark-charcoal max-w-sm lg:max-w-lg mx-auto w-full">
-      <h1 className="font-medium text-2xl text-center my-6">Profile</h1>
-      <form className="flex flex-col">
+    <div className="font-roboto text-base text-dark-charcoal max-w-sm mx-auto w-full">
+      <h1 className="font-medium text-2xl text-center mt-6 mb-4">Profile</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col">
         <input
           type="file"
           accept="image/*"
@@ -73,7 +130,7 @@ export default function DashProfile() {
           hidden
         />
         <div
-          className="relative w-32 h-32 mb-6 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
+          className="relative w-28 h-28  mb-6 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
           onClick={() => filePickerRef.current.click()}
         >
           {imageFileUploadProgress && (
@@ -99,6 +156,7 @@ export default function DashProfile() {
           )}
           <img
             src={imageFileUrl || currentUser.profilePicture}
+            alt="User's profile"
             className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
               imageFileUploadProgress &&
               imageFileUploadProgress < 100 &&
@@ -108,8 +166,18 @@ export default function DashProfile() {
         </div>
 
         {imageFileUploadError && (
-          <div className=" text-fail-red border bg-fail-red-tint border-red-300 mb-2 p-2 rounded-sm  font-medium text-center">
+          <div className=" text-red-700 bg-red-100 mb-2 p-2 rounded-sm  font-medium text-center">
             <span>{imageFileUploadError}</span>
+          </div>
+        )}
+        {updateError && (
+          <div className=" text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
+            <span>{updateError}</span>
+          </div>
+        )}
+        {updateSuccess && (
+          <div className=" text-green-800 bg-green-100 mb-2 p-2 rounded-sm font-medium text-center">
+            <span>{updateSuccess}</span>
           </div>
         )}
         <input
@@ -118,12 +186,14 @@ export default function DashProfile() {
           name="username"
           className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
           defaultValue={currentUser.username}
+          onChange={handleChange}
         />
         <input
           type="email"
           id="email"
           name="email"
-          className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
+          disabled
+          className="w-full p-2 mt-1 mb-2 border-2 rounded cursor-not-allowed bg-neutral-200"
           defaultValue={currentUser.email}
         />
         <input
@@ -132,11 +202,13 @@ export default function DashProfile() {
           name="password"
           placeholder="Reset Password"
           className="w-full p-2 mt-1 mb-6 border-2 rounded focus:outline-none focus:border-cool-blue"
+          onChange={handleChange}
+          value={formData.password || ""}
         />
         <button
           type="submit"
-          className={`font-medium text-midnight-indigo bg-neon-green w-full p-1.5 mb-4 border border-midnight-indigo hover:shadow-custom-indigo rounded cursor-pointer`}
-          disabled={loading}
+          className={`font-medium text-midnight-indigo ${ctaChanges} w-full p-1.5 mb-4 border border-midnight-indigo hover:shadow-custom-indigo rounded cursor-pointer`}
+          disabled={imageFileUploading || loading}
         >
           Save
         </button>
