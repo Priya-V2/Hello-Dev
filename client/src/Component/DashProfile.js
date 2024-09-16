@@ -13,6 +13,9 @@ import {
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
 } from "../redux/user/userSlice.js";
 
 export default function DashProfile() {
@@ -24,6 +27,7 @@ export default function DashProfile() {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(null);
   const [updateError, setUpdateError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const ctaChanges =
     loading || imageFileUploading
@@ -84,6 +88,7 @@ export default function DashProfile() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUpdateSuccess(null);
@@ -118,6 +123,27 @@ export default function DashProfile() {
       setUpdateError(error.message);
     }
   };
+
+  const handleDeleteUser = async () => {
+    setShowModal(false);
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch(deleteUserFailure(data.message));
+        setUpdateError(data.message);
+      } else {
+        dispatch(deleteUserSuccess());
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+
   return (
     <div className="font-roboto text-base text-dark-charcoal max-w-sm mx-auto w-full">
       <h1 className="font-medium text-2xl text-center mt-6 mb-4">Profile</h1>
@@ -214,9 +240,42 @@ export default function DashProfile() {
         </button>
       </form>
       <div className="flex justify-between text-fail-red">
-        <span className="cursor-pointer">Delete Account</span>
+        <span className="cursor-pointer" onClick={() => setShowModal(true)}>
+          Delete Account
+        </span>
         <span className="cursor-pointer">Sign out</span>
       </div>
+      {showModal && (
+        <div class="">
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/6 lg:w-96 text-base text-center bg-white p-12  rounded-md shadow-lg z-10 ">
+            <button
+              className="absolute top-2 right-4 text-3xl text-gray-800 cursor-pointer bg-none"
+              onClick={() => setShowModal(false)}
+            >
+              &times;
+            </button>
+            <span className="text-lg font-medium">
+              Are you sure you want to delete your account?
+            </span>
+            <div className="flex gap-4 justify-center mt-4">
+              <button
+                className="text-white bg-red-600 px-4 py-2 rounded-md"
+                onClick={handleDeleteUser}
+              >
+                Yes, I'm sure
+              </button>
+              <button
+                className="border px-4 py-2 rounded-md"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-10 backdrop-blur-sm z-5"></div>
+        </div>
+      )}
     </div>
   );
 }
