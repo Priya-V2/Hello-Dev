@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { signoutUserSuccess } from "../redux/user/userSlice";
 
 function Header() {
   const [isSearchOnFocus, setIsSearchOnFocus] = useState(false);
@@ -8,6 +9,7 @@ function Header() {
   const [dropDownDisplay, setDropDownDisplay] = useState(false);
   const { currentUser } = useSelector((store) => store.user);
 
+  const dispatch = useDispatch();
   const toggleMenu = () => {
     setMenuDisplay((prevState) => !prevState);
   };
@@ -18,6 +20,23 @@ function Header() {
   const gridSettings = isSearchOnFocus
     ? "grid-cols-2 sm:grid-cols-[1fr_1fr_2fr]"
     : "grid-cols-2 sm:grid-cols-3";
+
+  const handleSignout = async () => {
+    setDropDownDisplay(false);
+    try {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signoutUserSuccess());
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
@@ -110,27 +129,30 @@ function Header() {
           dropDownDisplay ? "absolute" : "hidden"
         } top-13 right-10 md:top-14 sm:right-4 text-dark-charcoal text-sm bg-white border-2 border-dark-charcoal rounded min-h-3 hover:shadow-custom-indigo`}
       >
-        <div
-          className="flex gap-2 items-center p-3 hover:bg-neutral-200 "
-          onClick={() => setDropDownDisplay()}
-        >
-          <img
-            src="/images/user-dark-charcoal.png"
-            alt="Profile image"
-            className="w-5 h-5"
-          />
-          <Link to="/dashboard?tab=profile">Profile</Link>
-        </div>
+        <Link to="/dashboard?tab=profile">
+          <div
+            className="flex gap-2 items-center p-3 hover:bg-neutral-200 "
+            onClick={() => setDropDownDisplay()}
+          >
+            <img
+              src="/images/user-dark-charcoal.png"
+              alt="Profile image"
+              className="w-5 h-5"
+            />
+            <span>Profile</span>
+          </div>
+        </Link>
         <hr className="mx-3 border-b border-neutral-400" />
-        <div className="flex gap-2 items-center p-3 hover:bg-neutral-200">
+        <div
+          className="flex gap-2 items-center p-3 hover:bg-neutral-200"
+          onClick={handleSignout}
+        >
           <img
             src="/images/sign-out.png"
             alt="sign-out image"
             className="w-5 h-5"
           />
-          <a href="#" onClick={() => setDropDownDisplay()}>
-            Sign out
-          </a>
+          <a href="#">Sign out</a>
         </div>
       </div>
       <div
