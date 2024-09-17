@@ -41,7 +41,9 @@ function Header() {
   return (
     <div>
       <nav
-        className={`grid ${gridSettings} text-white bg-midnight-indigo font-roboto font-medium text-xs sm:text-sm md:text-base lg:px-6 sm:px-3 px-2 md:py-3 py-2  border-y-2`}
+        className={`grid ${gridSettings} text-white bg-midnight-indigo font-roboto font-medium text-xs sm:text-sm md:text-base border-y-2 ${
+          currentUser ? "px-4 py-3" : "px-2 sm:px-4 py-2 md:py-4"
+        }`}
       >
         <div className="self-center justify-self-start flex gap-2">
           <Link to="/">
@@ -99,13 +101,13 @@ function Header() {
                     <img
                       src={currentUser.profilePicture}
                       alt="profile img"
-                      className="w-8 h-8 rounded-full"
+                      className="w-8 sm:w-10 h-8 sm:h-10 rounded-full object-cover"
                     />
                   ) : (
                     <img
                       src="/images/user.png"
                       alt="profile img"
-                      className="w-8 h-8 p-1 border rounded-full "
+                      className="w-8 sm:w-10 h-8 sm:h-10 p-1 border rounded-full "
                     />
                   )}
                 </button>
