@@ -22,6 +22,7 @@ passport.use(
             username: profile.displayName,
             email: profile.emails[0].value,
             profilePicture: profile._json.picture,
+            isAdmin: false,
           });
           await user.save();
         } else if (!user.googleId) {

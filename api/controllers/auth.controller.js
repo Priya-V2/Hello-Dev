@@ -47,9 +47,13 @@ const signin = async (req, res, next) => {
       return next(errorHandler(400, "Invalid Credentials"));
     }
     const { password: passcode, ...rest } = validUser._doc;
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "2d",
-    });
+    const token = jwt.sign(
+      { id: validUser._id, isAdmin: validUser.isAdmin },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "2d",
+      }
+    );
     res
       .status(200)
       .cookie("access_token", token, {
@@ -73,9 +77,13 @@ const googleCallback = (req, res) => {
         .json({ success: false, message: "Authentication failed" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "2d",
-    });
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "2d",
+      }
+    );
 
     res.cookie("access_token", token, {
       httpOnly: true,

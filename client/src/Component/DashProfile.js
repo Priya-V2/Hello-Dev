@@ -18,6 +18,7 @@ import {
   deleteUserFailure,
   signoutUserSuccess,
 } from "../redux/user/userSlice.js";
+import { Link } from "react-router-dom";
 
 export default function DashProfile() {
   const { currentUser, loading } = useSelector((store) => store.user);
@@ -244,17 +245,27 @@ export default function DashProfile() {
           id="password"
           name="password"
           placeholder="Reset Password"
-          className="w-full p-2 mt-1 mb-6 border-2 rounded focus:outline-none focus:border-cool-blue"
+          className="w-full p-2 mt-1 mb-5 border-2 rounded focus:outline-none focus:border-cool-blue"
           onChange={handleChange}
           value={formData.password || ""}
         />
         <button
           type="submit"
-          className={`font-medium text-midnight-indigo ${ctaChanges} w-full p-1.5 mb-4 border border-midnight-indigo hover:shadow-custom-indigo rounded cursor-pointer`}
+          className={`font-medium text-midnight-indigo ${ctaChanges} w-full p-1.5 mb-3 border border-midnight-indigo hover:shadow-custom-indigo rounded cursor-pointer`}
           disabled={imageFileUploading || loading}
         >
-          Save
+          Update
         </button>
+        {currentUser.isAdmin && (
+          <Link to={"/create-post"}>
+            <button
+              type="button"
+              className="flex gap-1 justify-center font-medium text-dark-charcoal w-full p-1.5 mb-4 border border-midnight-indigo hover:shadow-custom-indigo rounded"
+            >
+              Create a post
+            </button>
+          </Link>
+        )}
       </form>
       <div className="flex justify-between text-fail-red">
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>

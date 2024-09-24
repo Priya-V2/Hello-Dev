@@ -11,6 +11,8 @@ import Footer from "./Component/Footer";
 import OAuthCallbackHandler from "./Component/OAuthCallbackHandler";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./Component/PrivateRoute";
+import AdminPrivateRoute from "./Component/AdminPrivateRoute";
+import CreatePost from "./pages/CreatePost";
 
 function App() {
   return (
@@ -25,6 +27,9 @@ function App() {
         <Route path="/sign-up" element={<Signup />}></Route>
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
+        </Route>
+        <Route element={<AdminPrivateRoute />}>
+          <Route path="/create-post" element={<CreatePost />}></Route>
         </Route>
         <Route
           path="/auth/google/callback"
