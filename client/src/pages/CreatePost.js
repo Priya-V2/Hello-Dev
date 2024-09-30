@@ -10,6 +10,7 @@ import "react-quill/dist/quill.snow.css";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
   const filePickerRef = useRef();
@@ -18,7 +19,8 @@ export default function CreatePost() {
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [formData, setFormData] = useState({});
-  const [postContent, setPostContent] = useState("");
+  const [publishError, setPublishError] = useState(null);
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     const tempFile = e.target.files[0];
@@ -78,9 +80,26 @@ export default function CreatePost() {
     }
   };
 
-  const handleContentChange = (content) => {
-    setPostContent(content);
-    setFormData({ ...formData, content });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/post/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      }
+      if (res.ok) {
+        setPublishError(null);
+        navigate(`/post/${data.slug}`);
+      }
+    } catch (error) {
+      setPublishError("Some thing went wrong");
+    }
   };
 
   return (
@@ -91,7 +110,12 @@ export default function CreatePost() {
           <span>{imageFileUploadError}</span>
         </div>
       )}
-      <form>
+      {publishError && (
+        <div className=" text-red-700 bg-red-100 mb-2 p-2 rounded-sm  font-medium text-center">
+          <span>{publishError}</span>
+        </div>
+      )}
+      <form onSubmit={handleSubmit}>
         <div className="flex flex-col sm:flex-row sm:gap-4 justify-between">
           <input
             type="title"
@@ -99,11 +123,17 @@ export default function CreatePost() {
             name="title"
             placeholder="Title"
             className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
           />
           <select
             name="label"
             id="label"
             className="w-full sm:w-80 p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
+            onChange={(e) =>
+              setFormData({ ...formData, category: e.target.value })
+            }
           >
             <option value="uncategorized">Select a catagory</option>
             <option value="html">HTML</option>
@@ -157,21 +187,20 @@ export default function CreatePost() {
           <img
             src={formData.image}
             alt="Upload"
-            className="w-full h-min mb-4"
+            className="max-w-1/2 h-min mb-4"
           />
         )}
         <ReactQuill
           theme="snow"
           placeholder="Write Something..."
           className="h-72 mb-14"
-          value={postContent}
-          onChange={handleContentChange}
+          onChange={(value) => setFormData({ ...formData, content: value })}
           required
         />
 
         <button
+          type="submit"
           className="w-full font-semibold tracking-wide text-center text-midnight-indigo bg-neon-green border border-midnight-indigo rounded p-2"
-          onClick={handleImageUpload}
         >
           Publish
         </button>
