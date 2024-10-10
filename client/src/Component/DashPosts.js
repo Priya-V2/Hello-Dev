@@ -6,6 +6,8 @@ export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user);
   const [posts, setPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState("");
 
   useEffect(() => {
     const getAllPosts = async () => {
@@ -38,6 +40,27 @@ export default function DashPosts() {
         if (data.posts.length < 9) {
           setShowMore(false);
         }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeletePost = async () => {
+    setShowModal(false);
+    try {
+      const res = await fetch(
+        `/api/post/delete-post/${postIdToDelete}/${currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setPosts((prev) => prev.filter((post) => post._id !== postIdToDelete));
       }
     } catch (error) {
       console.log(error);
@@ -77,22 +100,30 @@ export default function DashPosts() {
                       <img
                         src={post.image}
                         alt={post.title || "Post Image"}
-                        className="w-20 h-10 object-cover bg-gray-500"
+                        className="w-20 h-10 object-cover bg-gray-500 hover:cursor-pointer"
                       />
                     </Link>
                   </td>
-                  <td className="font-medium min-w-96 px-6 py-3">
+                  <td className="font-medium min-w-96 px-6 py-3 hover:cursor-pointer">
                     <Link to={`/post/${post.slug}`}>{post.title}</Link>
                   </td>
                   <td className="font-normal text-neutral-500 px-6 py-3">
                     {post.category}
                   </td>
                   <td className="px-6 py-3">
-                    <span className="text-red-700 hover:underline">Delete</span>
+                    <span
+                      onClick={() => {
+                        setShowModal(true);
+                        setPostIdToDelete(post._id);
+                      }}
+                      className="text-red-700 hover:underline hover:cursor-pointer"
+                    >
+                      Delete
+                    </span>
                   </td>
                   <td className="px-6 py-3">
                     <Link
-                      className="text-blue-800 hover:underline"
+                      className="text-blue-800 hover:underline hover:pointer"
                       to={`/update-post/${post._id}`}
                     >
                       <span>Edit</span>
@@ -113,6 +144,39 @@ export default function DashPosts() {
         >
           Show more
         </button>
+      )}
+      {showModal && (
+        <div>
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/6 lg:w-96 text-base text-center bg-white p-12  rounded-md shadow-lg z-10 ">
+            <button
+              className="absolute top-2 right-4 text-3xl text-gray-800 cursor-pointer bg-none"
+              onClick={() => {
+                setShowModal(false);
+              }}
+            >
+              &times;
+            </button>
+            <span className="text-lg font-medium">
+              Are you sure you want to delete this post?
+            </span>
+            <div className="flex gap-4 justify-center mt-4">
+              <button
+                onClick={handleDeletePost}
+                className="text-white bg-red-600 px-4 py-2 rounded-md"
+              >
+                Yes, I'm sure
+              </button>
+              <button
+                className="border px-4 py-2 rounded-md"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-10 backdrop-blur-sm z-5"></div>
+        </div>
       )}
     </div>
   );
