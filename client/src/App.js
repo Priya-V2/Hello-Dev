@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./Component/PrivateRoute";
 import AdminPrivateRoute from "./Component/AdminPrivateRoute";
 import CreatePost from "./pages/CreatePost";
+import UpdatePost from "./pages/UpdatePost";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         </Route>
         <Route element={<AdminPrivateRoute />}>
           <Route path="/create-post" element={<CreatePost />}></Route>
+          <Route path="/update-post/:postId" element={<UpdatePost />}></Route>
         </Route>
         <Route
           path="/auth/google/callback"
