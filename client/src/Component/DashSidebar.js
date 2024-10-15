@@ -66,6 +66,21 @@ export default function DashSidebar() {
           </div>
         </Link>
 
+        <Link to={"/dashboard?tab=users"}>
+          <div
+            className={`flex items-center gap-3 text-white active:bg-midnight-indigo-tint rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
+              tab === "users" && "bg-midnight-indigo-tint"
+            }`}
+          >
+            <img
+              src="/images/users.png"
+              alt="Post Icon"
+              className="w-5 h-5 ml-1"
+            />
+            <span className="text-base font-medium">Users</span>
+          </div>
+        </Link>
+
         <div
           className={`flex items-center gap-3 text-white p-1.5 cursor-pointer rounded hover:bg-midnight-indigo-tint ${
             tab === "signout" && "bg-midnight-indigo-tint"
