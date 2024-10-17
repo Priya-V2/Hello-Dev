@@ -46,7 +46,7 @@ const getUsers = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-  if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+  if (req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You're not allowed to update the user"));
   }
   if (req.body.password) {
@@ -95,7 +95,7 @@ const updateUser = async (req, res, next) => {
 };
 
 const deleteUser = async (req, res, next) => {
-  if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+  if (!req.user.isAdmin && req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You are not allowed to delete this user"));
   }
   try {

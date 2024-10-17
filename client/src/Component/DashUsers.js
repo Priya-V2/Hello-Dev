@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user);
@@ -13,9 +12,8 @@ export default function DashUsers() {
     const getAllUsers = async () => {
       try {
         const res = await fetch(`/api/user/get-users/${currentUser._id}`);
-        console.log("res : ", res);
+
         const data = await res.json();
-        console.log("data : ", data);
 
         if (res.ok) {
           setUsers(data.users);
@@ -23,7 +21,6 @@ export default function DashUsers() {
             setShowMore(false);
           }
         }
-        console.log("users : ", users);
       } catch (error) {
         console.log(error);
       }
@@ -53,12 +50,9 @@ export default function DashUsers() {
   const handleDeleteUser = async () => {
     setShowModal(false);
     try {
-      const res = await fetch(
-        `/api/user/delete-user/${userIdToDelete}/${currentUser._id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+        method: "DELETE",
+      });
       const data = await res.json();
 
       if (!res.ok) {
