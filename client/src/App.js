@@ -14,6 +14,7 @@ import PrivateRoute from "./Component/PrivateRoute";
 import AdminPrivateRoute from "./Component/AdminPrivateRoute";
 import CreatePost from "./pages/CreatePost";
 import UpdatePost from "./pages/UpdatePost";
+import PostPage from "./pages/PostPage";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           element={<OAuthCallbackHandler />}
         ></Route>
         <Route path="/user" element={<User />}></Route>
+        <Route path="/post/:postSlug" element={<PostPage />}></Route>
       </Routes>
       <Footer />
     </BrowserRouter>

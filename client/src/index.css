@@ -1,3 +1,91 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.post-content {
+  font-family: "Roboto", sans-serif;
+}
+
+.post-content h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 2.5rem;
+  letter-spacing: 0.015em;
+  margin: 3rem 0 1.5rem 0;
+}
+
+.post-content h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.75rem;
+  letter-spacing: 0.015em;
+  margin: 2.25rem 0 1.125rem 0;
+}
+
+.post-content h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  letter-spacing: 0.015em;
+  margin: 2rem 0 1rem 0;
+}
+
+.post-content p {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.75rem;
+}
+
+.post-content ul,
+ol {
+  padding-left: 2.5rem;
+  line-height: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-content li {
+  margin-bottom: 0.5rem;
+}
+
+.post-content ul {
+  list-style: disc;
+}
+
+.post-content ol {
+  list-style: decimal;
+}
+
+.post-content a {
+  color: #1e90ff;
+  text-decoration: none;
+}
+
+.post-content a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .post-content h1 {
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem 0;
+  }
+
+  .post-content h2 {
+    font-size: 1.25rem;
+    margin: 1.75rem 0 0.75rem 0;
+  }
+
+  .post-content h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+    letter-spacing: 0.015em;
+    margin: 1.5rem 0 0.75rem 0;
+  }
+
+  .post-content p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.75rem;
+  }
+}
