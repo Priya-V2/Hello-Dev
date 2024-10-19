@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import CommentSection from "../Component/CommentSection";
 
 export default function PostPage() {
   const [post, setPost] = useState(null);
@@ -42,7 +43,7 @@ export default function PostPage() {
   }
   return (
     <main className="font-roboto text-base text-dark-charcoal max-w-5xl mx-auto min-h-screen p-5 md:p-8">
-      <span className="text-sm text-gray-500 text-center block mb-4">
+      <span className="block text-sm text-gray-500 text-center mb-4">
         {post &&
           new Date(post.createdAt).toLocaleDateString("en-US", {
             year: "numeric",
@@ -62,6 +63,7 @@ export default function PostPage() {
         className="max-w-2xl w-full mx-auto my-4 px-3 post-content"
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
+      <CommentSection postId={post && post._id} />
     </main>
   );
 }
