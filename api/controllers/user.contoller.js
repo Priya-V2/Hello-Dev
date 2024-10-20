@@ -45,6 +45,19 @@ const getUsers = async (req, res, next) => {
   }
 };
 
+const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+    const { password, ...rest } = user._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You're not allowed to update the user"));
@@ -117,4 +130,4 @@ const signoutUser = (req, res, next) => {
   }
 };
 
-export { getUsers, updateUser, deleteUser, signoutUser };
+export { getUsers, getUser, updateUser, deleteUser, signoutUser };
