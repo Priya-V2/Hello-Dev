@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signoutUserSuccess } from "../redux/user/userSlice";
+import { RiLogoutBoxRLine } from "react-icons/ri";
+import { FaSearch, FaUser, FaUserCircle } from "react-icons/fa";
+import { IoMenu } from "react-icons/io5";
 
 function Header() {
   const [isSearchOnFocus, setIsSearchOnFocus] = useState(false);
@@ -70,7 +73,7 @@ function Header() {
         </div>
 
         <div className="self-center justify-self-end">
-          <ul className="flex items-center gap-4">
+          <ul className="flex items-center gap-2">
             <li className="flex items-center border border-dark-bg-dark-charcoal p-1 rounded-md bg-white  ">
               <form>
                 <input
@@ -83,11 +86,7 @@ function Header() {
                   className="focus:outline-none text-xs lg:text-sm w-16 lg:w-32 focus:w-20 sm:focus:w-40 lg:focus:w-60 transition-width duration-300"
                 />
               </form>
-              <img
-                src="/images/search.png"
-                alt="Search icon"
-                className="w-4 h-4 lg-w-6"
-              />
+              <FaSearch className="text-midnight-indigo w-4 h-4 lg-w-6" />
             </li>
 
             {currentUser ? (
@@ -104,23 +103,21 @@ function Header() {
                       className="w-8 sm:w-10 h-8 sm:h-10 rounded-full object-cover"
                     />
                   ) : (
-                    <img
-                      src="/images/user.png"
-                      alt="profile img"
-                      className="w-8 sm:w-10 h-8 sm:h-10 p-1 border rounded-full "
-                    />
+                    <div className="flex w-8 sm:w-10 h-8 sm:h-10 items-center justify-center text-white border p-1 border-white rounded-full">
+                      <FaUser className="w-3.5 sm:w-5 h-3.5 sm:h-5 self-center justify-self-center text-white" />
+                    </div>
                   )}
                 </button>
               </li>
             ) : (
-              <li className="bg-neon-green px-4 text-midnight-indigo py-6px rounded ">
+              <li className="text-midnight-indigo bg-neon-green px-4 py-6px rounded ">
                 <Link to="/sign-in">Sign in</Link>
               </li>
             )}
 
             <li className="flex items-center sm:hidden">
               <button onClick={() => toggleMenu()}>
-                <img src="/images/menu.png" alt="Menu icon" className="w-4" />
+                <IoMenu className="w-6 h-6 text-white" />
               </button>
             </li>
           </ul>
@@ -136,11 +133,7 @@ function Header() {
             className="flex gap-2 items-center p-3 hover:bg-neutral-200 "
             onClick={() => setDropDownDisplay()}
           >
-            <img
-              src="/images/user-dark-charcoal.png"
-              alt="Profile image"
-              className="w-5 h-5"
-            />
+            <FaUser className="w-4 h-4 ml-1 text-dark-charcoal" />
             <span>Profile</span>
           </div>
         </Link>
@@ -149,11 +142,7 @@ function Header() {
           className="flex gap-2 items-center p-3 hover:bg-neutral-200"
           onClick={handleSignout}
         >
-          <img
-            src="/images/sign-out.png"
-            alt="sign-out image"
-            className="w-5 h-5"
-          />
+          <RiLogoutBoxRLine className="w-5 h-5 text-dark-charcoal" />
           <a href="#">Sign out</a>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaCheck, FaXmark } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 
 export default function DashUsers() {
@@ -106,16 +107,12 @@ export default function DashUsers() {
                   <td className="font-normal text-neutral-500 px-6 py-3">
                     {user.email}
                   </td>
-                  <td className="px-8 py-4">
-                    <img
-                      className="w-7 h-7"
-                      src={`${
-                        user.isAdmin
-                          ? "/images/correct.png"
-                          : "/images/wrong.png"
-                      }`}
-                      alt={`${user.isAdmin ? "admin true" : "admin false"}`}
-                    />
+                  <td className="px-10 py-4">
+                    {user.isAdmin ? (
+                      <FaCheck className="text-green-500 w-6 h-6" />
+                    ) : (
+                      <FaXmark className="text-red-500 w-6 h-6" />
+                    )}
                   </td>
                   <td className="px-6 py-3">
                     <span

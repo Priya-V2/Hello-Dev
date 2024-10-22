@@ -1,3 +1,5 @@
+import { FaEnvelope, FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
+
 export default function Footer() {
   return (
     <footer>
@@ -7,7 +9,7 @@ export default function Footer() {
         </p>
         <div className="flex gap-3 justify-center">
           <a href="mailto:priyav2.bct@gmail.com" className="self-center">
-            <img src="/images/email.svg" alt="Email icon" className="w-5 h-5" />
+            <FaEnvelope className="w-5 h-5 text-white" />
           </a>
           <a
             href="https://www.linkedin.com/in/priya-v2"
@@ -15,11 +17,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="self-center"
           >
-            <img
-              src="/images/linkedin.svg"
-              alt="Linked-in icon"
-              className="w-5 h-5"
-            />
+            <FaGithub className="w-5 h-5 text-white" />
           </a>
           <a
             href="https://github.com/priya-V2"
@@ -27,11 +25,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="self-center"
           >
-            <img
-              src="/images/github.svg"
-              alt="GitHub icon"
-              className="w-5 h-5"
-            />
+            <FaLinkedin className="w-5 h-5 text-white" />
           </a>
           <a
             href="#"
@@ -39,7 +33,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="self-center"
           >
-            <img src="/images/x.svg" alt="Twitter icon" className="w-5 h-5" />
+            <FaXTwitter className="w-5 h-5 text-white" />
           </a>
         </div>
       </div>

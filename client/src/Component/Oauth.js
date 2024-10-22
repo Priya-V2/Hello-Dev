@@ -1,4 +1,5 @@
 import React from "react";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Oauth() {
   const handleGoogleLogin = () => {
@@ -10,7 +11,7 @@ export default function Oauth() {
       onClick={handleGoogleLogin}
       className="flex gap-1 justify-center font-medium w-full p-1.5 mb-4 border border-midnight-indigo hover:shadow-custom-indigo rounded"
     >
-      <img src="images/google.png" alt="Google logo" className="w-6 h-6" />
+      <FcGoogle className="w-6 h-6" />
       <span>Continue with Google</span>
     </button>
   );

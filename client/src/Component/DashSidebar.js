@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signoutUserSuccess } from "../redux/user/userSlice";
+import { FaUser, FaRegFileAlt, FaUsers } from "react-icons/fa";
+import { RiLogoutBoxRLine } from "react-icons/ri";
 
 export default function DashSidebar() {
   const dispatch = useDispatch();
@@ -43,7 +45,7 @@ export default function DashSidebar() {
               tab === "profile" && "bg-midnight-indigo-tint"
             }`}
           >
-            <img src="/images/user.png" alt="User Icon" className="w-6 h-6" />
+            <FaUser className="w-4 h-4 ml-2" />
             <span className="text-base font-medium">Profile</span>
             <span className="text-xs ml-auto text-white bg-dark-charcoal px-3 py-1 rounded">
               {currentUser.isAdmin ? "Admin" : "User"}
@@ -57,11 +59,7 @@ export default function DashSidebar() {
               tab === "posts" && "bg-midnight-indigo-tint"
             }`}
           >
-            <img
-              src="/images/blog-post.png"
-              alt="Post Icon"
-              className="w-5 h-5 ml-1"
-            />
+            <FaRegFileAlt className="w-5 h-5 ml-1" />
             <span className="text-base font-medium">Posts</span>
           </div>
         </Link>
@@ -72,11 +70,7 @@ export default function DashSidebar() {
               tab === "users" && "bg-midnight-indigo-tint"
             }`}
           >
-            <img
-              src="/images/users.png"
-              alt="Post Icon"
-              className="w-5 h-5 ml-1"
-            />
+            <FaUsers className="w-5 h-5 ml-1" />
             <span className="text-base font-medium">Users</span>
           </div>
         </Link>
@@ -86,11 +80,7 @@ export default function DashSidebar() {
             tab === "signout" && "bg-midnight-indigo-tint"
           }`}
         >
-          <img
-            src="/images/sign-out-white.png"
-            alt="User Icon"
-            className="w-6 h-6"
-          />
+          <RiLogoutBoxRLine className="w-5 h-5 ml-1" />
           <span className="text-base font-medium" onClick={handleSignout}>
             Sign out
           </span>
