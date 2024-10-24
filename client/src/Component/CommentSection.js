@@ -8,6 +8,8 @@ export default function CommentSection({ postId }) {
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState(null);
   const [comments, setComments] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -91,6 +93,25 @@ export default function CommentSection({ postId }) {
     );
   };
 
+  const handleDelete = async (commentId) => {
+    setShowModal(false);
+    try {
+      if (!currentUser) {
+        navigate("/sign-in");
+        return;
+      }
+      const res = await fetch(`/api/comment/delete-comment/${commentId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setComments(comments.filter((comment) => comment._id !== commentId));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="font-roboto text-sm max-w-2xl w-full mx-auto">
       {currentUser ? (
@@ -159,9 +180,46 @@ export default function CommentSection({ postId }) {
               comment={comment}
               onLike={handleLike}
               onEdit={handleEdit}
+              onDelete={(commentId) => {
+                setShowModal(true);
+                setCommentToDelete(commentId);
+              }}
             />
           ))}
         </>
+      )}
+      {showModal && (
+        <div>
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/6 lg:w-96 text-base text-center bg-white p-12  rounded-md shadow-lg z-10 ">
+            <button
+              className="absolute top-2 right-4 text-3xl text-gray-800 cursor-pointer bg-none"
+              onClick={() => {
+                setShowModal(false);
+              }}
+            >
+              &times;
+            </button>
+            <span className="text-lg font-medium">
+              Are you sure you want to delete this post?
+            </span>
+            <div className="flex gap-4 justify-center mt-4">
+              <button
+                onClick={() => handleDelete(commentToDelete)}
+                className="text-white bg-red-600 px-4 py-2 rounded-md"
+              >
+                Yes, I'm sure
+              </button>
+              <button
+                className="border px-4 py-2 rounded-md"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-10 backdrop-blur-sm z-5"></div>
+        </div>
       )}
     </div>
   );
