@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CommentSection from "../Component/CommentSection";
+import PostCard from "../Component/PostCard";
 
 export default function PostPage() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [relatedPosts, setRelatedPosts] = useState(null);
   const { postSlug } = useParams();
 
   useEffect(() => {
@@ -29,6 +31,40 @@ export default function PostPage() {
       setError(error);
     }
   }, [postSlug]);
+
+  useEffect(() => {
+    if (!post) return;
+
+    try {
+      const fetchRelatedPost = async () => {
+        const res = await fetch(
+          `/api/post/get-posts?category=${post && post.category}&limit=5`
+        );
+        const data = await res.json();
+        console.log(data);
+
+        if (!res.ok) {
+          setError(data.message);
+        } else {
+          setError(false);
+
+          const filteredPosts = await data.posts.filter(
+            (relatedPost) => relatedPost._id !== post._id
+          );
+
+          if (filteredPosts.length === "3") {
+            setRelatedPosts(filteredPosts);
+          } else {
+            setRelatedPosts(filteredPosts.slice(0, 3));
+          }
+        }
+      };
+      fetchRelatedPost();
+    } catch (error) {
+      setError(error);
+      console.log(error);
+    }
+  }, [post]);
 
   if (loading) {
     return (
@@ -64,6 +100,18 @@ export default function PostPage() {
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
       <CommentSection postId={post && post._id} />
+
+      <div className="lg:max-w-6xl w-full mx-auto">
+        <h3 className="font-medium text-base lg:text-xl text-center mt-8 mb-2 sm:mb-4">
+          Related Posts
+        </h3>
+        <div className="flex flex-col sm:flex-row justify-between ">
+          {relatedPosts &&
+            relatedPosts.map((relatedPost) => (
+              <PostCard key={relatedPost._id} relatedPost={relatedPost} />
+            ))}
+        </div>
+      </div>
     </main>
   );
 }

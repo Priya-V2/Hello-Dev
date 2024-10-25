@@ -123,7 +123,7 @@ export default function DashPosts() {
                   </td>
                   <td className="px-6 py-3">
                     <Link
-                      className="text-blue-800 hover:underline hover:pointer"
+                      className="text-blue-700 hover:underline hover:pointer"
                       to={`/update-post/${post._id}`}
                     >
                       <span>Edit</span>
