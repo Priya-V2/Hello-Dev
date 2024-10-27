@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signoutUserSuccess } from "../redux/user/userSlice";
 import { FaUser, FaRegFileAlt, FaUsers } from "react-icons/fa";
 import { RiLogoutBoxRLine } from "react-icons/ri";
+import { LiaCommentsSolid } from "react-icons/lia";
 
 export default function DashSidebar() {
   const dispatch = useDispatch();
@@ -52,28 +53,42 @@ export default function DashSidebar() {
             </span>
           </div>
         </Link>
+        {currentUser.isAdmin && (
+          <>
+            <Link to={"/dashboard?tab=posts"}>
+              <div
+                className={`flex items-center gap-3 text-white active:bg-midnight-indigo-tint rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
+                  tab === "posts" && "bg-midnight-indigo-tint"
+                }`}
+              >
+                <FaRegFileAlt className="w-5 h-5 ml-1" />
+                <span className="text-base font-medium">Posts</span>
+              </div>
+            </Link>
 
-        <Link to={"/dashboard?tab=posts"}>
-          <div
-            className={`flex items-center gap-3 text-white active:bg-midnight-indigo-tint rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
-              tab === "posts" && "bg-midnight-indigo-tint"
-            }`}
-          >
-            <FaRegFileAlt className="w-5 h-5 ml-1" />
-            <span className="text-base font-medium">Posts</span>
-          </div>
-        </Link>
+            <Link to={"/dashboard?tab=users"}>
+              <div
+                className={`flex items-center gap-3 text-white active:bg-midnight-indigo-tint rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
+                  tab === "users" && "bg-midnight-indigo-tint"
+                }`}
+              >
+                <FaUsers className="w-5 h-5 ml-1" />
+                <span className="text-base font-medium">Users</span>
+              </div>
+            </Link>
 
-        <Link to={"/dashboard?tab=users"}>
-          <div
-            className={`flex items-center gap-3 text-white active:bg-midnight-indigo-tint rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
-              tab === "users" && "bg-midnight-indigo-tint"
-            }`}
-          >
-            <FaUsers className="w-5 h-5 ml-1" />
-            <span className="text-base font-medium">Users</span>
-          </div>
-        </Link>
+            <Link to={"/dashboard?tab=comments"}>
+              <div
+                className={`flex items-center gap-3 text-white active:bg-midnight-indigo-tint rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
+                  tab === "comments" && "bg-midnight-indigo-tint"
+                }`}
+              >
+                <LiaCommentsSolid className="w-5 h-5 ml-1" />
+                <span className="text-base font-medium">Comments</span>
+              </div>
+            </Link>
+          </>
+        )}
 
         <div
           className={`flex items-center gap-3 text-white p-1.5 cursor-pointer rounded hover:bg-midnight-indigo-tint ${
