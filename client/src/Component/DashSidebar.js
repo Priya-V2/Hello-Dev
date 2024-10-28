@@ -5,6 +5,7 @@ import { signoutUserSuccess } from "../redux/user/userSlice";
 import { FaUser, FaRegFileAlt, FaUsers } from "react-icons/fa";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { LiaCommentsSolid } from "react-icons/lia";
+import { BiSolidDashboard } from "react-icons/bi";
 
 export default function DashSidebar() {
   const dispatch = useDispatch();
@@ -40,6 +41,18 @@ export default function DashSidebar() {
   return (
     <div>
       <div className="font-roboto w-full md:w-56 text-dark-charcoal bg-midnight-indigo min-h-max md:min-h-screen border-b-2 p-4 md:p-2 md:pt-3 rounded-sm">
+        {currentUser.isAdmin && (
+          <Link to={"/dashboard?tab=dashboard"}>
+            <div
+              className={`flex items-center gap-3 text-white rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
+                tab === "dashboard" && "bg-midnight-indigo-tint"
+              }`}
+            >
+              <BiSolidDashboard className="w-5 h-5 ml-2" />
+              <span className="text-base font-medium">Dashboard</span>
+            </div>
+          </Link>
+        )}
         <Link to={"/dashboard?tab=profile"}>
           <div
             className={`flex items-center gap-3 text-white rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
