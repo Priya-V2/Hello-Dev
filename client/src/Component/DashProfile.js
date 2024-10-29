@@ -19,6 +19,7 @@ import {
   signoutUserSuccess,
 } from "../redux/user/userSlice.js";
 import { Link } from "react-router-dom";
+import { BsExclamationCircle } from "react-icons/bs";
 
 export default function DashProfile() {
   const { currentUser, loading } = useSelector((store) => store.user);
@@ -276,26 +277,27 @@ export default function DashProfile() {
         </span>
       </div>
       {showModal && (
-        <div class="">
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/6 lg:w-96 text-base text-center bg-white p-12  rounded-md shadow-lg z-10 ">
+        <div>
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 sm:w-96 text-base text-center bg-white px-6 py-8 rounded-md shadow-lg z-10 ">
             <button
               className="absolute top-2 right-4 text-3xl text-gray-800 cursor-pointer bg-none"
               onClick={() => setShowModal(false)}
             >
               &times;
             </button>
-            <span className="text-lg font-medium">
+            <BsExclamationCircle className="text-gray-500 w-8 sm:w-12 h-8 sm:h-12 mx-auto mb-4 sm:mb-6" />
+            <span className="text-base sm:text-lg text-gray-500 w-4">
               Are you sure you want to delete your account?
             </span>
             <div className="flex gap-4 justify-center mt-4">
               <button
-                className="text-white bg-red-600 px-4 py-2 rounded-md"
+                className="text-white text-sm bg-red-600 px-4 py-2 rounded-md"
                 onClick={handleDeleteUser}
               >
                 Yes, I'm sure
               </button>
               <button
-                className="border px-4 py-2 rounded-md"
+                className="text-sm border px-4 py-2 rounded-md"
                 onClick={() => setShowModal(false)}
               >
                 Cancel
