@@ -33,6 +33,24 @@ const create = async (req, res, next) => {
 
 const getPosts = async (req, res, next) => {
   try {
+    const { slug, postId } = req.query;
+
+    if (slug || postId) {
+      const post = await Post.findOneAndUpdate(
+        slug ? { slug } : { _id: postId },
+        { $inc: { views: 1 } },
+        { new: true }
+      );
+
+      if (!post) return next(errorHandler(404, "Post not found"));
+
+      return res.status(200).json({ posts: [post] });
+    }
+  } catch (error) {
+    next(error);
+  }
+
+  try {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.order === "asc" ? 1 : -1;

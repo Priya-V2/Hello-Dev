@@ -12,9 +12,9 @@ export default function PostPage() {
 
   useEffect(() => {
     try {
+      setLoading(true);
+      setError(null);
       const fetchPost = async () => {
-        setLoading(true);
-        setError(null);
         const res = await fetch(`/api/post/get-posts?slug=${postSlug}`);
         const data = await res.json();
 
@@ -41,7 +41,6 @@ export default function PostPage() {
           `/api/post/get-posts?category=${post && post.category}&limit=5`
         );
         const data = await res.json();
-        console.log(data);
 
         if (!res.ok) {
           setError(data.message);
