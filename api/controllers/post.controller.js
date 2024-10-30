@@ -82,15 +82,28 @@ const getPosts = async (req, res, next) => {
       createdAt: { $gte: oneMonthAgo },
     });
 
-    const totalViews = await Post.aggregate([
+    const totalViewsResult = await Post.aggregate([
       { $group: { _id: null, totalViews: { $sum: "$views" } } },
     ]);
+    const totalViews = totalViewsResult[0]?.totalViews || 0;
+
+    const lastMonthViewsResult = await Post.aggregate([
+      { $match: { createdAt: { $gte: oneMonthAgo } } },
+      {
+        $group: {
+          _id: null,
+          totalViews: { $sum: "$views" },
+        },
+      },
+    ]);
+    const lastMonthViews = lastMonthViewsResult[0]?.totalViews || 0;
 
     res.status(200).json({
       posts,
       totalPosts,
       lastMonthPosts,
-      totalViews: totalViews[0]?.totalViews || 0,
+      totalViews,
+      lastMonthViews,
     });
   } catch (error) {
     next(error);

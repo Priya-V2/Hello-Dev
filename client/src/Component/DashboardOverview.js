@@ -1,8 +1,77 @@
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { FaEye, FaRegFileAlt, FaUsers } from "react-icons/fa";
 import { FaArrowUpLong } from "react-icons/fa6";
 import { LiaCommentsSolid } from "react-icons/lia";
 
 export default function DashboardOverview() {
+  const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [totalViews, setTotalViews] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalComments, setTotalComments] = useState(0);
+  const [lastMonthPosts, setLastMonthPosts] = useState(0);
+  const [lastMonthViews, setLastMonthViews] = useState(0);
+  const [lastMonthUsers, setLastMonthUsers] = useState(0);
+  const [lastMonthComments, setLastMonthComments] = useState(0);
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch(
+          `/api/user/get-users/${currentUser._id}?limit=5`
+        );
+        const data = await res.json();
+        if (res.ok) {
+          setUsers(data.users);
+          setTotalUsers(data.totalUsers);
+          setLastMonthUsers(data.lastMonthUsers);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch("/api/post/get-posts?limit=5");
+        const data = await res.json();
+        if (res.ok) {
+          setPosts(data.posts);
+          setTotalPosts(data.totalPosts);
+          setTotalViews(data.totalViews);
+          setLastMonthPosts(data.lastMonthPosts);
+          setLastMonthViews(data.lastMonthViews);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    const fetchComments = async () => {
+      try {
+        const res = await fetch("/api/comment/get-comments?limit=5");
+        const data = await res.json();
+        if (res.ok) {
+          setComments(data.comments);
+          setTotalComments(data.totalComments);
+          setLastMonthComments(data.lastMonthComments);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    if (currentUser.isAdmin) {
+      fetchUsers();
+      fetchPosts();
+      fetchComments();
+    }
+  }, [currentUser]);
+
   return (
     <div className="font-roboto text-dark-charcoal mt-8 p-4 mx-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6">
@@ -17,7 +86,7 @@ export default function DashboardOverview() {
           </div>
           <div className="self-center justify-self-center">
             <p className="font-bold text-2xl lg:text-xl xl:text-2xl text-center">
-              54
+              {totalPosts}
             </p>
             <p className="text-sm lg:text-xs xl:text-sm text-gray-600">
               Total Posts
@@ -25,7 +94,7 @@ export default function DashboardOverview() {
           </div>
           <div className="col-span-2 flex items-center ml-4">
             <span className="justify-self-end self-center flex items-center gap-1 text-sm lg:text-xs xl:text-sm text-green-600 mr-1">
-              <FaArrowUpLong /> 28
+              <FaArrowUpLong /> {lastMonthPosts}
             </span>
             <p className="text-sm lg:text-xs xl:text-sm text-gray-500 self-center ml-2 lg:ml-1 xl:ml-2">
               Last Month
@@ -44,7 +113,7 @@ export default function DashboardOverview() {
           </div>
           <div className="self-center justify-self-center">
             <p className="font-bold text-2xl lg:text-xl xl:text-2xl text-center">
-              6546
+              {totalViews}
             </p>
             <p className="text-sm lg:text-xs xl:text-sm text-gray-600">
               Total Views
@@ -52,7 +121,7 @@ export default function DashboardOverview() {
           </div>
           <div className="col-span-2 flex items-center ml-4">
             <span className="justify-self-end self-center flex items-center gap-1 text-sm lg:text-xs xl:text-sm text-green-600 mr-1">
-              <FaArrowUpLong /> 3554
+              <FaArrowUpLong /> {lastMonthViews}
             </span>
             <p className="text-sm lg:text-xs xl:text-sm text-gray-500 self-center ml-2 lg:ml-1 xl:ml-2">
               Last Month
@@ -71,7 +140,7 @@ export default function DashboardOverview() {
           </div>
           <div className="self-center justify-self-center">
             <p className="font-bold text-2xl lg:text-xl xl:text-2xl text-center">
-              545
+              {totalUsers}
             </p>
             <p className="text-sm lg:text-xs xl:text-sm text-gray-600">
               Total Users
@@ -79,7 +148,7 @@ export default function DashboardOverview() {
           </div>
           <div className="col-span-2 flex items-center ml-4">
             <span className="justify-self-end self-center flex items-center gap-1 text-sm lg:text-xs xl:text-sm text-green-600 mr-1">
-              <FaArrowUpLong /> 62
+              <FaArrowUpLong /> {lastMonthUsers}
             </span>
             <p className="text-sm lg:text-xs xl:text-sm text-gray-500 self-center ml-2 lg:ml-1 xl:ml-2">
               Last Month
@@ -98,7 +167,7 @@ export default function DashboardOverview() {
           </div>
           <div className="self-center justify-self-center pr-4">
             <p className="font-bold text-2xl lg:text-xl xl:text-2xl text-center">
-              375
+              {totalComments}
             </p>
             <p className="text-sm lg:text-xs xl:text-sm text-gray-600 min-w-max">
               Total Comments
@@ -106,7 +175,7 @@ export default function DashboardOverview() {
           </div>
           <div className="col-span-2 flex items-center ml-4">
             <span className="justify-self-end self-center flex items-center gap-1 text-sm lg:text-xs xl:text-sm text-green-600 mr-1">
-              <FaArrowUpLong /> 154
+              <FaArrowUpLong /> {lastMonthComments}
             </span>
             <p className="text-sm lg:text-xs xl:text-sm text-gray-500 self-center ml-2 lg:ml-1 xl:ml-2">
               Last Month
