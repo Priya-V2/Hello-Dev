@@ -69,6 +69,7 @@ const getPosts = async (req, res, next) => {
       .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
+
     const totalPosts = await Post.countDocuments();
     const now = new Date();
     const oneMonthAgo = new Date(
@@ -76,13 +77,20 @@ const getPosts = async (req, res, next) => {
       now.getMonth() - 1,
       now.getDate()
     );
+
     const lastMonthPosts = await Post.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
+
+    const totalViews = await Post.aggregate([
+      { $group: { _id: null, totalViews: { $sum: "$views" } } },
+    ]);
+
     res.status(200).json({
       posts,
       totalPosts,
       lastMonthPosts,
+      totalViews: totalViews[0]?.totalViews || 0,
     });
   } catch (error) {
     next(error);
