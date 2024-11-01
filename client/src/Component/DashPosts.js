@@ -80,6 +80,7 @@ export default function DashPosts() {
               <th className="px-6 py-3 font-medium bg-gray-100">Post Image</th>
               <th className="px-6 py-3 font-medium bg-gray-100">Post Title</th>
               <th className="px-6 py-3 font-medium bg-gray-100">Category</th>
+              <th className="px-6 py-3 font-medium bg-gray-100">Views</th>
               <th className="px-6 py-3 font-medium bg-gray-100">Delete</th>
               <th className="px-6 py-3 font-medium bg-gray-100 rounded-tr">
                 Edit
@@ -111,6 +112,7 @@ export default function DashPosts() {
                   <td className="font-normal text-neutral-500 px-6 py-3">
                     {post.category}
                   </td>
+                  <td className="font-medium px-6 py-3">{post.views}</td>
                   <td className="px-6 py-3">
                     <span
                       onClick={() => {
