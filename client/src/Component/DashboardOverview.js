@@ -4,6 +4,7 @@ import { FaEye, FaRegFileAlt, FaUsers } from "react-icons/fa";
 import { FaArrowUpLong } from "react-icons/fa6";
 import { LiaCommentsSolid } from "react-icons/lia";
 import { Link } from "react-router-dom";
+import RecentPosts from "./RecentPosts";
 
 export default function DashboardOverview() {
   const [posts, setPosts] = useState([]);
@@ -74,8 +75,8 @@ export default function DashboardOverview() {
   }, [currentUser]);
 
   return (
-    <div className="font-roboto text-dark-charcoal mt-8 p-4 mx-auto">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 mb-12">
+    <div className="flex flex-col font-roboto text-dark-charcoal mt-8 p-4 mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 mx-auto mb-12">
         <div
           className="grid grid-cols-2 gap-4 sm:gap-y-4 xl:gap-y-5 w-52 lg:w-44 xl:w-52 px-4 pt-4 pb-3 rounded"
           style={{
@@ -184,61 +185,7 @@ export default function DashboardOverview() {
           </div>
         </div>
       </div>
-      <div className="rounded shadow-custom-indigo p-4">
-        <div className="flex justify-between px-4">
-          <h3 className="self-end font-medium">Recent Posts</h3>
-          <Link to={"/dashboard?tab=posts"}>
-            <button className="text-sm hover:underline hover:cursor-pointer">
-              See All
-            </button>
-          </Link>
-        </div>
-        <table className="table-auto overflow-x-scroll md:mx-auto mt-4 p-3 scrollbar scrollbar-track-neutral-100 scrollbar-thumb-neutral-300 hover:scrollbar-thumb-neutral-500">
-          <thead>
-            <tr>
-              <th className="font-medium text-center max-w-max bg-gray-100 rounded-l-lg px-6 py-2">
-                Date Created
-              </th>
-              <th className="font-medium text-center bg-gray-100 px-6 py-2">
-                Date Updated
-              </th>
-              <th className="font-medium text-center bg-gray-100 px-6 py-2">
-                Title
-              </th>
-              <th className="font-medium text-center bg-gray-100 px-6 py-2">
-                Category
-              </th>
-              <th className="font-medium text-center min-w-min bg-gray-100 rounded-r-lg px-6 py-2">
-                Views
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post) => {
-              return (
-                <tr className="last:border-b-0">
-                  <td className="text-center text-gray-600 px-6 py-2 border-b">
-                    {new Date(post.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="text-center text-gray-600 px-6 py-2 border-b">
-                    {new Date(post.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="font-medium px-6 py-2 border-b">
-                    <Link to={`/post/${post.slug}`}>{post.title}</Link>
-                  </td>
-                  <td className="text-gray-500 pl-6 px-6 py-2 border-b">
-                    {post.category}
-                  </td>
-                  <td className="font-medium px-6 py-2 border-b">
-                    {post.views}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      ;
+      <RecentPosts posts={posts} />
     </div>
   );
 }
