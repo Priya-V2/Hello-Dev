@@ -4,7 +4,7 @@ import { FaEye, FaRegFileAlt, FaUsers } from "react-icons/fa";
 import { FaArrowUpLong } from "react-icons/fa6";
 import { LiaCommentsSolid } from "react-icons/lia";
 import { Link } from "react-router-dom";
-import RecentPosts from "./RecentPosts";
+import PostsDisplay from "./PostsDisplay";
 
 export default function DashboardOverview() {
   const [posts, setPosts] = useState([]);
@@ -75,7 +75,7 @@ export default function DashboardOverview() {
   }, [currentUser]);
 
   return (
-    <div className="flex flex-col font-roboto text-dark-charcoal mt-8 p-4 mx-auto">
+    <div className="flex flex-col font-roboto text-dark-charcoal mt-8 p-4 mx-auto overflow-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 mx-auto mb-12">
         <div
           className="grid grid-cols-2 gap-4 sm:gap-y-4 xl:gap-y-5 w-52 lg:w-44 xl:w-52 px-4 pt-4 pb-3 rounded"
@@ -185,7 +185,13 @@ export default function DashboardOverview() {
           </div>
         </div>
       </div>
-      <RecentPosts posts={posts} />
+      <div className="grid grid-cols-2 justify-between px-4 py-1 mb-4 border-b">
+        <h3 className="self-end font-medium">Recent Posts</h3>
+        <button className="justify-self-end text-sm hover:underline hover:cursor-pointer">
+          <Link to={"/dashboard?tab=posts"}>See All</Link>
+        </button>
+      </div>
+      <PostsDisplay posts={posts} />
     </div>
   );
 }
