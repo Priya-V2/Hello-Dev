@@ -5,7 +5,7 @@ export default function PostCard({ relatedPost }) {
     <div className="font-roboto max-w-72 w-full mx-auto my-4">
       <div className="flex justify-center">
         <img
-          className="w-full max-w-72 max-h-36 sm:max-w-56 sm:max-h-28 lg:max-w-72 lg:max-h-36 mb-2 sm:mb-4 object-cover rounded"
+          className="w-full max-w-72 max-h-36 sm:max-w-56 sm:max-h-28 lg:max-w-72 lg:max-h-36 mb-2 sm:mb-4 object-cover rounded transform transition-transform duration-300 ease-in-out hover:scale-110"
           src={relatedPost && relatedPost.image}
           alt={relatedPost && relatedPost.title}
         />
