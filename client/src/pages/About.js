@@ -2,7 +2,7 @@ import React from "react";
 
 export default function About() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="font-roboto text-dark-charcoal min-h-screen flex items-center justify-center p-4">
       <div className="max-w-2xl mx-auto mb-8 p-3 text-center">
         <div>
           <h1 className="text-3xl font font-semibold text-center my-7">
@@ -21,7 +21,7 @@ export default function About() {
             <p>
               This blog features weekly articles and tutorials that cover
               fundamental topics like HTML, CSS, JavaScript, and popular
-              frameworks. I’m constantly exploring and learning new
+              frameworks. I'm constantly exploring and learning new
               technologies, so you can expect fresh content and insights
               regularly!
             </p>
