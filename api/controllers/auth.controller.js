@@ -89,7 +89,11 @@ const googleCallback = (req, res) => {
       httpOnly: true,
     });
 
-    res.redirect("http://localhost:3000/auth/google/Callback");
+    res.redirect(
+      process.env.NODE_ENV === "production"
+        ? process.env.GOOGLE_CALLBACK_URL
+        : "http://localhost:5000/api/auth/google/callback"
+    );
   })(req, res);
 };
 

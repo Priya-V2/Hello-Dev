@@ -6,7 +6,6 @@ import {
   googleCallback,
   checkAuth,
 } from "../controllers/auth.controller.js";
-import passport from "passport";
 
 const router = express.Router();
 
