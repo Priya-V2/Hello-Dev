@@ -10,6 +10,7 @@ import postRoutes from "./routes/post.route.js";
 import commentRoutes from "./routes/comment.route.js";
 import "./config/auth.config.js";
 import cookieParser from "cookie-parser";
+import path from "path";
 
 dotenv.config();
 
@@ -41,8 +42,16 @@ mongoose
   .then(() => console.log("MongoDb is connected"))
   .catch((err) => console.log(err));
 
+const __dirname = path.resolve();
+
 app.listen("5000", () => {
   console.log("Server is listening to the port 5000");
+});
+
+app.use(express.static(path.join(__dirname, "/client/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
 app.use((err, req, res, next) => {
