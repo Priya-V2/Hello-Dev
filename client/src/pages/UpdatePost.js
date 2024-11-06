@@ -13,6 +13,17 @@ import "react-circular-progressbar/dist/styles.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+const toolbarOptions = [
+  [{ header: [1, 2, 3, false] }],
+  ["bold", "italic", "underline"],
+  [{ list: "ordered" }, { list: "bullet" }],
+  ["link", "code-block"],
+];
+
+const modules = {
+  toolbar: toolbarOptions,
+};
+
 export default function UpdatePost() {
   const filePickerRef = useRef();
   const [fileName, setFileName] = useState(null);
@@ -220,6 +231,7 @@ export default function UpdatePost() {
           theme="snow"
           placeholder="Write Something..."
           className="h-72 mb-14"
+          modules={modules}
           onChange={(value) => setFormData({ ...formData, content: value })}
           required
           value={formData.content}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CommentSection from "../Component/CommentSection";
 import PostCard from "../Component/PostCard";
+import PostContent from "../Component/PostContent";
 
 export default function PostPage() {
   const [post, setPost] = useState(null);
@@ -94,10 +95,12 @@ export default function PostPage() {
         alt={post && post.title}
         className="w-full max-h-[600px] p-4 object-cover"
       />
-      <div
+      {/* <div
         className="max-w-2xl w-full mx-auto my-4 px-3 post-content"
         dangerouslySetInnerHTML={{ __html: post && post.content }}
-      ></div>
+      ></div> */}
+      <PostContent post={post} />
+
       <CommentSection postId={post && post._id} />
 
       <div className="lg:max-w-6xl w-full mx-auto">

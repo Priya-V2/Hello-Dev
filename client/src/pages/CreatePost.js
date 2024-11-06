@@ -5,12 +5,23 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import React, { useRef, useState } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
+
+const toolbarOptions = [
+  [{ header: [1, 2, 3, false] }],
+  ["bold", "italic", "underline"],
+  [{ list: "ordered" }, { list: "bullet" }],
+  ["link", "code-block"],
+];
+
+const modules = {
+  toolbar: toolbarOptions,
+};
 
 export default function CreatePost() {
   const filePickerRef = useRef();
@@ -82,13 +93,16 @@ export default function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const res = await fetch("/api/post/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+
       const data = await res.json();
+
       if (!res.ok) {
         setPublishError(data.message);
         return;
@@ -194,6 +208,7 @@ export default function CreatePost() {
           theme="snow"
           placeholder="Write Something..."
           className="h-72 mb-14"
+          modules={modules}
           onChange={(value) => setFormData({ ...formData, content: value })}
           required
         />
