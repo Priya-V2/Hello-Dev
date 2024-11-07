@@ -16,12 +16,15 @@ import CreatePost from "./pages/CreatePost";
 import UpdatePost from "./pages/UpdatePost";
 import PostPage from "./pages/PostPage";
 import ScrollToTop from "./Component/ScrollToTop";
+import Headroom from "react-headroom";
 
 function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Header />
+      <Headroom>
+        <Header />
+      </Headroom>
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/about" element={<About />}></Route>

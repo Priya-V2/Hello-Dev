@@ -44,7 +44,7 @@ function Header() {
   return (
     <div>
       <nav
-        className={`grid ${gridSettings} text-white bg-midnight-indigo font-roboto font-medium text-xs sm:text-sm md:text-base border-y-2 ${
+        className={`grid ${gridSettings} text-white bg-midnight-indigo font-roboto font-medium text-xs sm:text-sm md:text-base ${
           currentUser ? "px-4 py-3" : "px-2 sm:px-4 py-2 md:py-4"
         }`}
       >
