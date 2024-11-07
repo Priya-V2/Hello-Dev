@@ -95,10 +95,7 @@ export default function PostPage() {
         alt={post && post.title}
         className="w-full max-h-[600px] p-4 object-cover"
       />
-      {/* <div
-        className="max-w-2xl w-full mx-auto my-4 px-3 post-content"
-        dangerouslySetInnerHTML={{ __html: post && post.content }}
-      ></div> */}
+
       <PostContent post={post} />
 
       <CommentSection postId={post && post._id} />

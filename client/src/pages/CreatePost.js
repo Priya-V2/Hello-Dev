@@ -33,6 +33,15 @@ export default function CreatePost() {
   const [publishError, setPublishError] = useState(null);
   const navigate = useNavigate();
 
+  const replacePreTagsWithCode = (content) => {
+    return content
+      .replace(
+        /<pre class="ql-syntax" spellcheck="false">/g,
+        "<pre spellcheck='false'><code>"
+      )
+      .replace(/<\/pre>/g, "</code></pre>");
+  };
+
   const handleFileChange = (e) => {
     const tempFile = e.target.files[0];
     if (tempFile) {
@@ -94,11 +103,13 @@ export default function CreatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formattedContent = replacePreTagsWithCode(formData.content);
+
     try {
       const res = await fetch("/api/post/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, content: formattedContent }),
       });
 
       const data = await res.json();

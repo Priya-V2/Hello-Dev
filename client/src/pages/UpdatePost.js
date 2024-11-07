@@ -36,6 +36,15 @@ export default function UpdatePost() {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
 
+  const replacePreTagsWithCode = (content) => {
+    return content
+      .replace(
+        /<pre class="ql-syntax" spellcheck="false">/g,
+        "<pre spellcheck='false'><code>"
+      )
+      .replace(/<\/pre>/g, "</code></pre>");
+  };
+
   useEffect(() => {
     try {
       const fetchPost = async () => {
@@ -114,15 +123,18 @@ export default function UpdatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const formattedContent = replacePreTagsWithCode(formData.content);
     try {
       const res = await fetch(
         `/api/post/update-post/${postId}/${currentUser._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({ ...formData, content: formattedContent }),
         }
       );
+
       const data = await res.json();
       if (!res.ok) {
         setPublishError(data.message);
