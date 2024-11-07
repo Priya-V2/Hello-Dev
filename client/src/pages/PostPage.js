@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import CommentSection from "../Component/CommentSection";
 import PostCard from "../Component/PostCard";
 import PostContent from "../Component/PostContent";
+import ScrollToTop from "../Component/ScrollToTop.js";
+import { FaArrowUp } from "react-icons/fa";
 
 export default function PostPage() {
   const [post, setPost] = useState(null);
@@ -111,6 +113,12 @@ export default function PostPage() {
             ))}
         </div>
       </div>
+      <button
+        onClick={() => window.scrollTo(0, 0)}
+        className="p-2 lg:p-3 rounded-full shadow-custom-indigo fixed bottom-8 right-2 sm:right-4 xl:right-8"
+      >
+        <FaArrowUp className="w-4 h-4" />
+      </button>
     </main>
   );
 }
