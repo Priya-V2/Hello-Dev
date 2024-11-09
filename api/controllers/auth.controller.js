@@ -17,12 +17,22 @@ const signup = async (req, res, next) => {
   ) {
     next(errorHandler(400, "All fields are required"));
   }
+
+  const existingEmail = await User.findOne({ email });
+  if (existingEmail) {
+    return next(errorHandler(409, "Existing email"));
+  }
+
+  const randomSuffix = Math.random().toString(36).substring(2, 5);
+  const finalUserName = username + randomSuffix;
+
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({
-    username,
+    username: finalUserName,
     email,
     password: hashedPassword,
   });
+
   try {
     await newUser.save();
     res.json("New user created sucessfully");

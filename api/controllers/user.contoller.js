@@ -59,34 +59,47 @@ const getUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
+  const { username, password } = req.body;
+
+  const existingUser = await User.findOne({ username });
+
+  if (existingUser) {
+    return next(errorHandler(409, "Existing username"));
+  }
+
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You're not allowed to update the user"));
   }
-  if (req.body.password) {
-    if (req.body.password.length < 6) {
+
+  if (password) {
+    if (password.length < 6) {
       return next(errorHandler(400, "Password must be atleast 6 characters"));
     }
-    req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    password = bcryptjs.hashSync(password, 10);
   }
-  if (req.body.username) {
-    if (req.body.username.length < 7 || req.body.username.length > 20) {
+
+  if (username) {
+    if (username.length < 7 || username.length > 20) {
       return next(
         errorHandler(400, "Username must be between 7 to 20 characters")
       );
     }
-    if (req.body.username.includes(" ")) {
+
+    if (username.includes(" ")) {
       return next(errorHandler(400, "Username cannot contain spaces"));
     }
-    if (req.body.username !== req.body.username.toLowerCase()) {
+
+    if (username !== username.toLowerCase()) {
       return next(errorHandler(400, "Username must be lowercase"));
     }
-    // req.user.username = req.body.username;
-    if (!req.body.username.match(/^[a-z0-9_]+$/)) {
+
+    if (!username.match(/^[a-z0-9_]+$/)) {
       return next(
         errorHandler(400, "Username can only contain letters and numbers")
       );
     }
   }
+
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.userId,
