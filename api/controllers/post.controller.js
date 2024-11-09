@@ -124,6 +124,7 @@ const updatePost = async (req, res, next) => {
           category: req.body.category,
           image: req.body.image,
           content: req.body.content,
+          slug: req.body.slug,
         },
       },
       { new: true }

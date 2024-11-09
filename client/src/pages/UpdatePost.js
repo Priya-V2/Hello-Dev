@@ -170,9 +170,20 @@ export default function UpdatePost() {
             name="title"
             placeholder="Title"
             className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
+            onChange={(e) => {
+              const modifiedTitle = e.target.value;
+              const modifiedSlug = modifiedTitle
+                .toLowerCase()
+                .replace(/[^a-zA-Z0-9\s]/g, "")
+                .trim()
+                .split(/\s+/)
+                .join("-");
+              setFormData({
+                ...formData,
+                title: e.target.value,
+                slug: modifiedSlug,
+              });
+            }}
             value={formData.title}
           />
           <select
