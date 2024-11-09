@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BsExclamationCircle } from "react-icons/bs";
-import { FaCheck, FaXmark } from "react-icons/fa6";
+import { FaUser } from "react-icons/fa";
+import { FaCheck, FaCircleUser, FaXmark } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 
 export default function DashUsers() {
@@ -96,11 +97,15 @@ export default function DashUsers() {
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-11 py-3">
-                    <img
-                      src={user.profilePicture}
-                      alt="user profile"
-                      className="w-10 h-10 object-cover bg-gray-500 rounded-full hover:cursor-pointer"
-                    />
+                    {user.profilePicture ? (
+                      <img
+                        src={user.profilePicture}
+                        alt="user profile"
+                        className="w-10 h-10 object-cover bg-gray-500 rounded-full hover:cursor-pointer"
+                      />
+                    ) : (
+                      <FaCircleUser className="w-10 h-10 object-cover text-center rounded-full" />
+                    )}
                   </td>
                   <td className="font-medium px-6 py-3 hover:cursor-pointer">
                     {user.username}

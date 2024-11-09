@@ -20,6 +20,7 @@ import {
 } from "../redux/user/userSlice.js";
 import { Link } from "react-router-dom";
 import { BsExclamationCircle } from "react-icons/bs";
+import { FaUserCircle } from "react-icons/fa";
 
 export default function DashProfile() {
   const { currentUser, loading } = useSelector((store) => store.user);
@@ -175,7 +176,7 @@ export default function DashProfile() {
           hidden
         />
         <div
-          className="relative w-28 h-28  mb-6 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
+          className="relative w-24 h-24  mb-6 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
           onClick={() => filePickerRef.current.click()}
         >
           {imageFileUploadProgress && (
@@ -199,15 +200,19 @@ export default function DashProfile() {
               }}
             />
           )}
-          <img
-            src={imageFileUrl || currentUser.profilePicture}
-            alt="User's profile"
-            className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
-              imageFileUploadProgress &&
-              imageFileUploadProgress < 100 &&
-              "opacity-60"
-            }`}
-          />
+          {imageFileUrl || currentUser.profilePicture ? (
+            <img
+              src={imageFileUrl || currentUser.profilePicture}
+              alt="User's profile"
+              className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
+                imageFileUploadProgress &&
+                imageFileUploadProgress < 100 &&
+                "opacity-60"
+              }`}
+            />
+          ) : (
+            <FaUserCircle className="rounded-full w-full h-full object-cover" />
+          )}
         </div>
 
         {imageFileUploadError && (
