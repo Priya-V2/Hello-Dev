@@ -10,9 +10,16 @@ export default function OAuthCallbackHandler() {
   useEffect(() => {
     const handleOAuthCallback = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/auth/check", {
-          credentials: "include", // To send cookies with the request
-        });
+        const response = await fetch(
+          `${
+            process.env.NODE_ENV === "production"
+              ? process.env.GOOGLE_CALLBACK_URL
+              : "http://localhost:5000/api/auth/check"
+          }`,
+          {
+            credentials: "include", // To send cookies with the request
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();

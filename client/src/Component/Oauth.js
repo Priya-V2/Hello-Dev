@@ -3,7 +3,10 @@ import { FcGoogle } from "react-icons/fc";
 
 export default function Oauth() {
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/api/auth/google";
+    window.location.href =
+      process.env.NODE_ENV === "production"
+        ? process.env.GOOGLE_CALLBACK_URL
+        : "http://localhost:5000/api/auth/google";
   };
   return (
     <button
