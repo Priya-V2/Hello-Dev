@@ -1,13 +1,10 @@
 import React from "react";
 import { FcGoogle } from "react-icons/fc";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export default function Oauth() {
   const handleGoogleLogin = () => {
     window.location.href =
-      process.env.NODE_ENV === "production"
+      process.env.REACT_APP_NODE_ENV === "production"
         ? "https://hello-dev.onrender.com/api/auth/google"
         : "http://localhost:5000/api/auth/google";
   };
