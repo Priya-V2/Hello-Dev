@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../redux/user/userSlice";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export default function OAuthCallbackHandler() {
   const navigate = useNavigate();
@@ -13,7 +16,7 @@ export default function OAuthCallbackHandler() {
         const response = await fetch(
           `${
             process.env.NODE_ENV === "production"
-              ? process.env.GOOGLE_CALLBACK_URL
+              ? "https://hello-dev.onrender.com/api/auth/check"
               : "http://localhost:5000/api/auth/check"
           }`,
           {
