@@ -40,7 +40,7 @@ export default function DashSidebar() {
   };
   return (
     <div>
-      <div className="font-roboto w-full md:w-56 text-dark-charcoal bg-midnight-indigo min-h-max md:min-h-screen border-b-2 p-4 md:p-2 md:pt-3 rounded-sm">
+      <div className="font-roboto w-full md:w-56 text-dark-charcoal bg-midnight-indigo min-h-max md:min-h-screen border-b-2 p-4 md:p-2 md:pt-3">
         {currentUser.isAdmin && (
           <Link to={"/dashboard?tab=dashboard"}>
             <div

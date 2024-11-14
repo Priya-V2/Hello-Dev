@@ -69,7 +69,7 @@ export default function DashPosts() {
   };
 
   return (
-    <div className="table-auto font-roboto text-base text-dark-charcoal overflow-x-scroll md:mx-auto mt-4 p-3 scrollbar scrollbar-track-neutral-100 scrollbar-thumb-neutral-300 hover:scrollbar-thumb-neutral-500">
+    <div className="table-auto font-roboto text-base text-dark-charcoal overflow-x-scroll mx-auto mt-4 p-3 scrollbar">
       {currentUser.isAdmin && posts.length > 0 ? (
         <table className="shadow-custom-indigo rounded">
           <thead>

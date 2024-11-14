@@ -75,7 +75,7 @@ export default function DashboardOverview() {
   }, [currentUser]);
 
   return (
-    <div className="flex flex-col font-roboto text-dark-charcoal mt-8 p-4 mx-auto overflow-auto">
+    <div className="grid grid-cols-1 font-roboto text-dark-charcoal mt-8 p-4 mx-auto overflow-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 mx-auto mb-12">
         <div
           className="grid grid-cols-2 gap-4 sm:gap-y-4 xl:gap-y-5 w-52 lg:w-44 xl:w-52 px-4 pt-4 pb-3 rounded"
