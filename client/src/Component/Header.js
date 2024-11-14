@@ -74,7 +74,7 @@ function Header() {
 
         <div className="self-center justify-self-end">
           <ul className="flex items-center gap-2">
-            <li className="flex items-center border border-dark-bg-dark-charcoal p-1 rounded-md bg-white  ">
+            <li className="hidden sm:flex items-center border border-dark-bg-dark-charcoal p-1 rounded-md bg-white">
               <form>
                 <input
                   type="search"
@@ -83,7 +83,7 @@ function Header() {
                   placeholder="Search..."
                   onFocus={() => setIsSearchOnFocus(true)}
                   onBlur={() => setIsSearchOnFocus(false)}
-                  className="focus:outline-none text-xs lg:text-sm w-16 lg:w-32 focus:w-20 sm:focus:w-40 lg:focus:w-60 transition-width duration-300"
+                  className="focus:outline-none text-xs lg:text-sm w-14 sm:w-16 lg:w-32 focus:w-20 sm:focus:w-40 lg:focus:w-60 transition-width duration-300"
                 />
               </form>
               <FaSearch className="text-midnight-indigo w-4 h-4 lg-w-6" />
@@ -110,7 +110,7 @@ function Header() {
                 </button>
               </li>
             ) : (
-              <li className="text-midnight-indigo bg-neon-green px-4 py-6px rounded ">
+              <li className="text-midnight-indigo bg-neon-green px-4 py-6px rounded">
                 <Link to="/sign-in">Sign in</Link>
               </li>
             )}
@@ -126,12 +126,12 @@ function Header() {
       <div
         className={`${
           dropDownDisplay ? "absolute" : "hidden"
-        } top-13 right-10 md:top-14 sm:right-4 text-dark-charcoal text-sm bg-white border-2 border-dark-charcoal rounded min-h-3 hover:shadow-custom-indigo`}
+        } top-13 right-10 md:top-14 sm:right-4 text-dark-charcoal text-sm bg-white border rounded min-h-3 hover:shadow-custom-indigo`}
       >
         <Link to="/dashboard?tab=profile">
           <div
             className="flex gap-2 items-center p-3 hover:bg-neutral-200 "
-            onClick={() => setDropDownDisplay()}
+            onClick={() => toggleDropdown()}
           >
             <FaUser className="w-4 h-4 ml-1 text-dark-charcoal" />
             <span>Profile</span>
@@ -146,39 +146,52 @@ function Header() {
           <a href="#">Sign out</a>
         </div>
       </div>
-      <div
-        className={`menu-container fixed top-0 left-0 w-full h-full bg-midnight-indigo text-white text-base transition-transform duration-300 ease-in-out ${
-          menuDisplay
-            ? "translate-x-0 opacity-100"
-            : "-translate-x-full opacity-0"
-        }`}
-      >
-        <div className="absolute top-4 right-4">
-          <button onClick={toggleMenu} className="text-white text-xl">
-            &times;
-          </button>
+      {menuDisplay && (
+        <div
+          className={`absolute top-0 left-0 bg-white w-screen h-screen text-dark-charcoal text-base transform transition-transform duration-1000 ease-in-out ${
+            menuDisplay ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="absolute top-4 right-4">
+            <button onClick={toggleMenu} className="text-dark-charcoal text-xl">
+              &times;
+            </button>
+          </div>
+          <div className="flex flex-col mt-24 mx-10">
+            <div className="self-start flex items-center justify-between bg-white border w-full p-1 mb-36 rounded-md">
+              <form>
+                <input
+                  type="search"
+                  name="search"
+                  id="search"
+                  placeholder="Search..."
+                  onFocus={() => setIsSearchOnFocus(true)}
+                  onBlur={() => setIsSearchOnFocus(false)}
+                  className="focus:outline-none text-sm text-white w-52 focus:w-60 transition-width duration-300"
+                />
+              </form>
+              <FaSearch className="text-midnight-indigo w-6 h-4" />
+            </div>
+            <ul className="flex flex-col items-center">
+              <Link to="/" onClick={() => toggleMenu()}>
+                <li className="mb-4">Home</li>
+              </Link>
+              <Link to="/about" onClick={() => toggleMenu()}>
+                <li className="mb-4">About</li>
+              </Link>
+              <Link to="/topics" onClick={() => toggleMenu()}>
+                <li className="mb-4">Topics</li>
+              </Link>
+              <Link to="/sign-in" onClick={() => toggleMenu()}>
+                <li>Sign in</li>
+              </Link>
+            </ul>
+            <div className="text-midnight-indigo text-center mt-36 bg-neon-green border border-midnight-indigo px-4 py-6px w-full rounded">
+              <Link to="/sign-up">Sign up</Link>
+            </div>
+          </div>
         </div>
-        <ul className="flex flex-col items-center justify-center h-full">
-          <Link to="/">
-            <li className="mb-4" onClick={() => toggleMenu()}>
-              Home
-            </li>
-          </Link>
-          <Link to="/about">
-            <li className="mb-4" onClick={() => toggleMenu()}>
-              About
-            </li>
-          </Link>
-          <Link to="/topics">
-            <li className="mb-4" onClick={() => toggleMenu()}>
-              Topics
-            </li>
-          </Link>
-          <Link to="/sign-in" onClick={() => toggleMenu()}>
-            <li>Sign in</li>
-          </Link>
-        </ul>
-      </div>
+      )}
     </div>
   );
 }

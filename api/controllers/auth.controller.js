@@ -101,8 +101,8 @@ const googleCallback = (req, res) => {
 
     res.redirect(
       process.env.NODE_ENV === "production"
-        ? process.env.GOOGLE_CALLBACK_URL
-        : "http://localhost:3000/api/auth/google"
+        ? "https://hello-dev.onrender.com/auth/google/callback"
+        : "http://localhost:3000/auth/google/Callback"
     );
   })(req, res);
 };
