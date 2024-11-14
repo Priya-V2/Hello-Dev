@@ -102,7 +102,7 @@ const googleCallback = (req, res) => {
     res.redirect(
       process.env.NODE_ENV === "production"
         ? "https://hello-dev.onrender.com/auth/google/callback"
-        : "http://localhost:3000/auth/google/Callback"
+        : "http://localhost:3000/auth/google/callback"
     );
   })(req, res);
 };

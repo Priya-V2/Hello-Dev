@@ -12,7 +12,7 @@ export default function OAuthCallbackHandler() {
       try {
         const response = await fetch(
           `${
-            process.env.REACT_APP_NODE_ENVV === "production"
+            process.env.REACT_APP_NODE_ENV === "production"
               ? "https://hello-dev.onrender.com/api/auth/check"
               : "http://localhost:5000/api/auth/check"
           }`,

@@ -49,7 +49,7 @@ export default function Home() {
           web development, software engineering, and programming languages.
         </p>
       </div>
-      <div className="lg:max-w-6xl w-full mx-auto">
+      <div className="lg:max-w-6xl w-full mx-auto mb-24">
         <h3 className="font-medium text-base lg:text-xl text-center mt-8 mb-2 sm:mb-4">
           Recent Posts
         </h3>
