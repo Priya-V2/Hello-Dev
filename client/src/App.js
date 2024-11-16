@@ -17,6 +17,7 @@ import UpdatePost from "./pages/UpdatePost";
 import PostPage from "./pages/PostPage";
 import ScrollToTop from "./Component/ScrollToTop";
 import Headroom from "react-headroom";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/search" element={<Search />}></Route>
         <Route path="/sign-in" element={<Signin />}></Route>
         <Route path="/sign-up" element={<Signup />}></Route>
+        <Route path="/forgot-password" element={<ForgotPassword />}></Route>
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
         </Route>

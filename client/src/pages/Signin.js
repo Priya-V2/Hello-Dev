@@ -79,20 +79,28 @@ export default function Signin() {
               onChange={handleChange}
             />
             <br />
+            {/* <div className="flex items-center justify-between"> */}
             <label htmlFor="password">Password:</label>
+            {/* </div> */}
             <br />
             <input
               type="password"
               id="password"
               name="password"
               placeholder="Your Password"
-              className="w-full p-2 mt-1 mb-6 border-2 rounded focus:outline-none focus:border-cool-blue"
+              className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
               onChange={handleChange}
             />
             <br />
+            <a
+              href="/forgot-password"
+              className="text-cool-blue hover:text-blue-600 hover:underline"
+            >
+              Forgot password?
+            </a>
             <button
               type="submit"
-              className={`font-medium text-midnight-indigo ${ctaColor} w-full p-1.5 mb-4 border border-midnight-indigo hover:shadow-custom-indigo  rounded`}
+              className={`font-medium text-midnight-indigo ${ctaColor} w-full p-1.5  my-4 border border-midnight-indigo hover:shadow-custom-indigo  rounded`}
               disabled={loading}
             >
               {loading ? (
@@ -109,7 +117,7 @@ export default function Signin() {
               )}
             </button>
             <Oauth />
-            <div className="flex gap-1">
+            <div className="flex gap-1 text-sm">
               <span>Don&apos;t have an account?</span>
               <Link to={"/sign-up"}>
                 <span className="text-cool-blue">Sign Up</span>
