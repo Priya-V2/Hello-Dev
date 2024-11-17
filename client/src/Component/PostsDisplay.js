@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function RecentPosts({ posts }) {
+export default function PostsDisplay({ posts }) {
   return (
     <div className="overflow-auto">
       <table className="w-[640px] xl:w-full">

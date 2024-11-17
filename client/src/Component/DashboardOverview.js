@@ -8,6 +8,7 @@ import PostsDisplay from "./PostsDisplay";
 
 export default function DashboardOverview() {
   const [posts, setPosts] = useState([]);
+  const [popularPosts, setPopularPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [comments, setComments] = useState([]);
   const [totalPosts, setTotalPosts] = useState(0);
@@ -47,6 +48,7 @@ export default function DashboardOverview() {
           setTotalViews(data.totalViews);
           setLastMonthPosts(data.lastMonthPosts);
           setLastMonthViews(data.lastMonthViews);
+          setPopularPosts(data.popularPosts);
         }
       } catch (error) {
         console.log(error.message);
@@ -75,7 +77,7 @@ export default function DashboardOverview() {
   }, [currentUser]);
 
   return (
-    <div className="grid grid-cols-1 font-roboto text-dark-charcoal mt-8 p-4 mx-auto overflow-auto">
+    <div className="grid grid-cols-1 sm:flex sm:flex-col font-roboto text-dark-charcoal mt-8 mb-16 p-4 mx-auto overflow-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-6 mx-auto mb-12">
         <div
           className="grid grid-cols-2 gap-4 sm:gap-y-4 xl:gap-y-5 w-52 lg:w-44 xl:w-52 px-4 pt-4 pb-3 rounded"
@@ -192,6 +194,13 @@ export default function DashboardOverview() {
         </button>
       </div>
       <PostsDisplay posts={posts} />
+      <div className="grid grid-cols-2 justify-between px-4 py-1 mt-12 mb-4 border-b">
+        <h3 className="self-end font-medium">Popular Posts</h3>
+        <button className="justify-self-end text-sm hover:underline hover:cursor-pointer">
+          <Link to={"/dashboard?tab=posts"}>See All</Link>
+        </button>
+      </div>
+      <PostsDisplay posts={popularPosts} />
     </div>
   );
 }

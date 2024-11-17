@@ -70,6 +70,8 @@ const getPosts = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
+    const popularPosts = await Post.find().sort({ views: -1 }).limit(5);
+
     const totalPosts = await Post.countDocuments();
     const now = new Date();
     const oneMonthAgo = new Date(
@@ -104,6 +106,7 @@ const getPosts = async (req, res, next) => {
       lastMonthPosts,
       totalViews,
       lastMonthViews,
+      popularPosts,
     });
   } catch (error) {
     next(error);
