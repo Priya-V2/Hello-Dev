@@ -1,14 +1,35 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function ForgotPassword() {
   const { loading } = useSelector((store) => store.user);
   const ctaColor = loading ? "bg-neon-green-tint" : "bg-neon-green";
+  const [emailId, setEmailId] = useState("");
+
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ emailId }),
+      });
+
+      if (res.ok) {
+        alert("Email sent successfully!");
+      } else {
+        alert("Failed to send email.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while sending the email.");
+    }
+  };
 
   return (
     <div className="min-h-screen">
       <div className="font-roboto text-base text-neutral-600 w-80 sm:w-96 px-8 py-6 md:px-10 md:py-8 mx-auto mt-12 shadow-custom-indigo rounded">
         <p className="text-center mb-4">Please enter your mail id below</p>
-        <form>
+        <form onSubmit={handleSubmit}>
           <label htmlFor="email">Email:</label>
           <br />
           <input
@@ -17,6 +38,7 @@ export default function ForgotPassword() {
             name="email"
             placeholder="example@gmail.com"
             className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
+            onChange={(e) => setEmailId(e.target.value)}
           />
           <button
             type="submit"
