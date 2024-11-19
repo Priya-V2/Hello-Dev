@@ -151,23 +151,56 @@ const checkAuth = (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const { emailId } = req.body;
+  const otpCreatedAt = new Date();
 
-  const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: emailId,
-    subject: "Password Reset Request",
-    html: '<p>Click <a href="http://localhost:3000/reset-password">here</a> to reset your password.</p>',
-  };
+  const otp = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
 
   try {
+    const user = await User.findOneAndUpdate(
+      { email: emailId },
+      { otp, otpCreatedAt },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      logger: true,
+      debug: true,
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: emailId,
+      subject: "Password Reset Request",
+      html: `
+    <div style="font-family: Roboto, sans-serif; font-size: 16px; color: #000000; max-width: 768px; margin: 48px auto 0; min-height: 100vh;">
+          <img src="https://drive.google.com/uc?id=1DH3BNkiQ2U9pbdOpi_hQNZ1btUJu03wy" alt="Hello Dev logo" style="width: 12rem; margin-bottom: 32px; display: block; margin-left: auto; margin-right: auto;" />
+          <p style="margin-bottom: 24px;">
+            Please use the below One Time Password (OTP) to reset your password. This will be valid for 10 minutes only.
+          </p>
+          <p style="margin-bottom: 24px;">
+            Your OTP to reset the password is: 
+            <span style="font-weight: bold;">
+              ${otp}
+            </span>
+          </p>
+          <p style="margin-bottom: 24px;">
+            If you are unable to change the password within 10 minutes of OTP generation, please click on "Forgot password?" and continue with the same process again.
+          </p>
+          <p>Regards,</p>
+          <p>Hello Dev!</p>
+        </div>
+    `,
+    };
+
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: "Email sent successfully" });
   } catch (error) {

@@ -24,6 +24,13 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    otp: {
+      type: String,
+    },
+    otpCreatedAt: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );
