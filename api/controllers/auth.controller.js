@@ -209,6 +209,18 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+const checkOtp = async (req, res, next) => {
+  const { emailId, otp } = req.body;
+  try {
+    const user = await User.findOne({ email: emailId });
+    if (otp === user.otp) {
+      res.status(200).json({ message: "OTP verified successfully" });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   signup,
   signin,
@@ -216,4 +228,5 @@ export {
   googleCallback,
   checkAuth,
   forgotPassword,
+  checkOtp,
 };

@@ -1,16 +1,18 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function ForgotPassword() {
-  const { loading } = useSelector((store) => store.user);
-  const ctaColor = loading ? "bg-neon-green-tint" : "bg-neon-green";
+  const [loading, setLoading] = useState(false);
   const [emailId, setEmailId] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpField, setOtpField] = useState(false);
+  const ctaColor = loading ? "bg-neon-green-tint" : "bg-neon-green";
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -18,14 +20,39 @@ export default function ForgotPassword() {
       });
 
       if (res.ok) {
-        console.log(res);
-        navigate("/reset-password");
+        setLoading(false);
+        setOtpField(true);
       } else {
-        console.log(res);
         alert("Failed to send email.");
       }
     } catch (error) {
+      setLoading(false);
       console.error("Error:", error);
+    }
+  };
+
+  const handleOTPCheck = async (e) => {
+    e.preventDefault();
+    console.log(otp);
+    try {
+      setLoading(true);
+      const res = await fetch("/api/auth/check-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ emailId, otp }),
+      });
+
+      if (res.ok) {
+        setLoading(false);
+        navigate("/reset-password");
+      } else {
+        setLoading(false);
+        alert("Failed to match the OTP");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error:", error);
+      alert(error);
     }
   };
 
@@ -37,39 +64,87 @@ export default function ForgotPassword() {
           alt="Hello dev logo"
           className="w-48 lg:w-56 mb-6 mx-auto"
         />
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email:</label>
-          <br />
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Please enter your mail id here"
-            required
-            className="w-full p-2 mt-1 mb-6 border-2 rounded focus:outline-none focus:border-cool-blue"
-            onChange={(e) => setEmailId(e.target.value)}
-          />
-          <p className="mb-4">You'll receive an email with the OTP.</p>
-          <button
-            type="submit"
-            className={`font-medium text-midnight-indigo ${ctaColor} w-full p-1.5 border border-midnight-indigo hover:shadow-custom-indigo  rounded`}
-            disabled={loading}
-          >
-            {loading ? (
-              <div className="flex justify-center items-center">
-                <svg
-                  className="animate-spin h-4 w-4 text-midnight-indigo border-4 border-t-transparent border-midnight-indigo rounded-full justify-items-center"
-                  viewBox="0 0 24 24"
-                  style={{ borderWidth: "3px" }}
-                ></svg>
-                <span className="ml-2">Loading...</span>
-              </div>
-            ) : (
-              "Send Email"
-            )}
-          </button>
-          <br />
-        </form>
+        {otpField ? (
+          <form onSubmit={handleOTPCheck}>
+            <label htmlFor="email">Email:</label>
+            <br />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Please enter your mail id here"
+              required
+              className="w-full p-2 mt-1 mb-6 border-2 rounded focus:outline-none focus:border-cool-blue"
+              onChange={(e) => setEmailId(e.target.value)}
+            />
+            <br />
+            <label htmlFor="otp">OTP:</label>
+            <br />
+            <input
+              type="text"
+              name="otp"
+              id="otp"
+              placeholder="Your OTP please"
+              required
+              className="w-full p-2 mt-1 mb-6 border-2 rounded focus:outline-none focus:border-cool-blue"
+              onChange={(e) => setOtp(e.target.value)}
+            />
+            <p className="mb-4">Please enter the received OTP above</p>
+            <button
+              type="submit"
+              className={`font-medium text-midnight-indigo ${ctaColor} w-full p-1.5 border border-midnight-indigo hover:shadow-custom-indigo  rounded`}
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="flex justify-center items-center">
+                  <svg
+                    className="animate-spin h-4 w-4 text-midnight-indigo border-4 border-t-transparent border-midnight-indigo rounded-full justify-items-center"
+                    viewBox="0 0 24 24"
+                    style={{ borderWidth: "3px" }}
+                  ></svg>
+                  <span className="ml-2">Loading...</span>
+                </div>
+              ) : (
+                "Reset Password"
+              )}
+            </button>
+            <br />
+          </form>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="email">Email:</label>
+            <br />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Please enter your mail id here"
+              required
+              className="w-full p-2 mt-1 mb-6 border-2 rounded focus:outline-none focus:border-cool-blue"
+              onChange={(e) => setEmailId(e.target.value)}
+            />
+            <p className="mb-4">You'll receive an email with the OTP</p>
+            <button
+              type="submit"
+              className={`font-medium text-midnight-indigo ${ctaColor} w-full p-1.5 border border-midnight-indigo hover:shadow-custom-indigo  rounded`}
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="flex justify-center items-center">
+                  <svg
+                    className="animate-spin h-4 w-4 text-midnight-indigo border-4 border-t-transparent border-midnight-indigo rounded-full justify-items-center"
+                    viewBox="0 0 24 24"
+                    style={{ borderWidth: "3px" }}
+                  ></svg>
+                  <span className="ml-2">Loading...</span>
+                </div>
+              ) : (
+                "Send Email"
+              )}
+            </button>
+            <br />
+          </form>
+        )}
       </div>
     </div>
   );
