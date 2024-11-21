@@ -213,8 +213,28 @@ const checkOtp = async (req, res, next) => {
   const { emailId, otp } = req.body;
   try {
     const user = await User.findOne({ email: emailId });
+
+    if (!user) {
+      next(errorHandler(400, "User not found"));
+    }
+
+    if (user.otp !== otp) {
+      next(errorHandler(400, "Invalid OTP"));
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "10m",
+    });
+
     if (otp === user.otp) {
-      res.status(200).json({ message: "OTP verified successfully" });
+      res
+        .status(200)
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "Strict",
+        })
+        .json({ message: "OTP verified successfully" });
     }
   } catch (error) {
     next(error);
@@ -239,14 +259,26 @@ const resetPassword = async (req, res, next) => {
   if (password !== confirmPassword) {
     next(errorHandler(400, "Please enter the same password in both fields"));
   }
+
   try {
-    const user = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { email },
       {
         $set: { password: hashedPassword },
       }
     );
-    res.status(200).json("Password update successfully");
+
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+    });
+
+    res
+      .status(200)
+      .json(
+        "Password update successfully. Please log in with your new credentials."
+      );
   } catch (error) {
     next(error);
   }
