@@ -18,6 +18,7 @@ import PostPage from "./pages/PostPage";
 import ScrollToTop from "./Component/ScrollToTop";
 import Headroom from "react-headroom";
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/sign-in" element={<Signin />}></Route>
         <Route path="/sign-up" element={<Signup />}></Route>
         <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+        <Route path="/reset-password" element={<ResetPassword />}></Route>
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
         </Route>

@@ -221,6 +221,37 @@ const checkOtp = async (req, res, next) => {
   }
 };
 
+const resetPassword = async (req, res, next) => {
+  const { email, password, confirmPassword } = req.body;
+  const hashedPassword = bcryptjs.hashSync(password, 10);
+
+  if (
+    !email ||
+    !password ||
+    !confirmPassword ||
+    email === "" ||
+    password === "" ||
+    confirmPassword === ""
+  ) {
+    next(errorHandler(400, "All fields are required"));
+  }
+
+  if (password !== confirmPassword) {
+    next(errorHandler(400, "Please enter the same password in both fields"));
+  }
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      {
+        $set: { password: hashedPassword },
+      }
+    );
+    res.status(200).json("Password update successfully");
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   signup,
   signin,
@@ -228,5 +259,6 @@ export {
   googleCallback,
   checkAuth,
   forgotPassword,
+  resetPassword,
   checkOtp,
 };

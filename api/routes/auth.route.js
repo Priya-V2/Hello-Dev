@@ -6,6 +6,7 @@ import {
   googleCallback,
   checkAuth,
   forgotPassword,
+  resetPassword,
   checkOtp,
 } from "../controllers/auth.controller.js";
 
@@ -16,6 +17,7 @@ router.post("/sign-up", signup);
 router.post("/sign-in", signin);
 router.post("/forgot-password", forgotPassword);
 router.post("/check-otp", checkOtp);
+router.put("/reset-password", resetPassword);
 
 // Google OAuth routes
 

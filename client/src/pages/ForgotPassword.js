@@ -105,7 +105,7 @@ export default function ForgotPassword() {
                   <span className="ml-2">Loading...</span>
                 </div>
               ) : (
-                "Reset Password"
+                "Verify OTP"
               )}
             </button>
             <br />
