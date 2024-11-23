@@ -12,8 +12,6 @@ export const theme = {
       "cool-blue": "#1E90FF",
       "midnight-indigo": "#201e43",
       "midnight-indigo-tint": "#63627b",
-      "fail-red": "#D32F2F",
-      "fail-red-tint": "#fbeaea",
     },
     fontFamily: {
       roboto: ["Roboto", "sans-serif"],

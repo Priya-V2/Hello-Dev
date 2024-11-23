@@ -46,7 +46,7 @@ export default function ResetPassword() {
           className="w-48 lg:w-56 mb-6 mx-auto"
         />
         {error && (
-          <div className=" text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
+          <div className="text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
             <span>{error}</span>
           </div>
         )}

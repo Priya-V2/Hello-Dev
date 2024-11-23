@@ -153,12 +153,12 @@ export default function UpdatePost() {
     <div className="min-h-screen text-base text-center text-dark-charcoal font-roboto mx-auto max-w-sm sm:max-w-lg md:max-w-2xl xl:max-w-3xl">
       <h1 className="text-3xl font-semibold my-6">Update post</h1>
       {imageFileUploadError && (
-        <div className=" text-red-700 bg-red-100 mb-2 p-2 rounded-sm  font-medium text-center">
+        <div className="text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
           <span>{imageFileUploadError}</span>
         </div>
       )}
       {publishError && (
-        <div className=" text-red-700 bg-red-100 mb-2 p-2 rounded-sm  font-medium text-center">
+        <div className="text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
           <span>{publishError}</span>
         </div>
       )}

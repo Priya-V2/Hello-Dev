@@ -216,17 +216,17 @@ export default function DashProfile() {
         </div>
 
         {imageFileUploadError && (
-          <div className=" text-red-700 bg-red-100 mb-2 p-2 rounded-sm  font-medium text-center">
+          <div className="text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
             <span>{imageFileUploadError}</span>
           </div>
         )}
         {updateError && (
-          <div className=" text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
+          <div className="text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
             <span>{updateError}</span>
           </div>
         )}
         {updateSuccess && (
-          <div className=" text-green-800 bg-green-100 mb-2 p-2 rounded-sm font-medium text-center">
+          <div className="text-green-800 bg-green-100 mb-2 p-2 rounded-sm font-medium text-center">
             <span>{updateSuccess}</span>
           </div>
         )}
@@ -273,7 +273,7 @@ export default function DashProfile() {
           </Link>
         )}
       </form>
-      <div className="flex justify-between text-fail-red">
+      <div className="flex justify-between text-red-700">
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
           Delete Account
         </span>

@@ -161,7 +161,7 @@ export default function CommentSection({ postId }) {
         </form>
       )}
       {commentError && (
-        <div className=" text-fail-red border bg-fail-red-tint border-red-300 mb-2 p-2 rounded-sm  font-medium text-center">
+        <div className="text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
           <span>{commentError}</span>
         </div>
       )}
