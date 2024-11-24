@@ -5,8 +5,11 @@ import PostCard from "../Component/PostCard";
 import PostContent from "../Component/PostContent";
 import ScrollToTop from "../Component/ScrollToTop.js";
 import { FaArrowUp } from "react-icons/fa";
+import { FaThumbsUp } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
 export default function PostPage() {
+  const { currentUser } = useSelector((store) => store.user);
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -68,6 +71,28 @@ export default function PostPage() {
     }
   }, [post]);
 
+  const handleLike = async () => {
+    try {
+      if (!currentUser) {
+        navigate("/sign-in");
+        return;
+      }
+      const res = await fetch(
+        `/api/post/like-post/${post._id}/${currentUser._id}`,
+        {
+          method: "PUT",
+        }
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message);
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -81,7 +106,7 @@ export default function PostPage() {
   }
   return (
     <main className="font-roboto text-base text-dark-charcoal max-w-5xl mx-auto min-h-screen p-5 md:p-8">
-      <span className="block text-sm text-gray-500 text-center mb-4">
+      <span className="block text-sm text-gray-500 text-center mb-2">
         {post &&
           new Date(post.createdAt).toLocaleDateString("en-US", {
             year: "numeric",
@@ -89,6 +114,12 @@ export default function PostPage() {
             day: "numeric",
           })}
       </span>
+      <div className="flex gap-2 content-center justify-center text-sm text-gray-500 text-center mb-4">
+        <button onClick={handleLike}>
+          <FaThumbsUp className="text-sm self-center text-gray-500"></FaThumbsUp>
+        </button>
+        <span className="self-cente">53</span>
+      </div>
       <h1 className="font-medium text-2xl sm:text-3xl lg:text-4xl text-center mb-4">
         {post && post.title}
       </h1>
