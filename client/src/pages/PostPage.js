@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CommentSection from "../Component/CommentSection";
 import PostCard from "../Component/PostCard";
 import PostContent from "../Component/PostContent";
@@ -14,7 +14,9 @@ export default function PostPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [relatedPosts, setRelatedPosts] = useState(null);
+  const [likes, setLikes] = useState("No likes yet!");
   const { postSlug } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     try {
@@ -30,6 +32,7 @@ export default function PostPage() {
         } else {
           setLoading(false);
           setPost(data.posts[0]);
+          setLikes(data.posts[0].likes);
         }
       };
       fetchPost();
@@ -74,6 +77,7 @@ export default function PostPage() {
   const handleLike = async () => {
     try {
       if (!currentUser) {
+        alert("Please sign-in to like the post");
         navigate("/sign-in");
         return;
       }
@@ -87,6 +91,8 @@ export default function PostPage() {
 
       if (!res.ok) {
         setError(data.message);
+      } else {
+        setLikes(data.post.likes);
       }
     } catch (error) {
       setError(error.message);
@@ -118,7 +124,7 @@ export default function PostPage() {
         <button onClick={handleLike}>
           <FaThumbsUp className="text-sm self-center text-gray-500"></FaThumbsUp>
         </button>
-        <span className="self-cente">53</span>
+        <span className="self-center">{likes}</span>
       </div>
       <h1 className="font-medium text-2xl sm:text-3xl lg:text-4xl text-center mb-4">
         {post && post.title}

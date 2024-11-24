@@ -154,18 +154,28 @@ const likePost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId);
     if (!post) {
-      return next(errorHandler(404, "Comment not found"));
+      return next(errorHandler(404, "Post not found"));
     }
-    const userIndex = post.likes.indexOf(req.user.id);
-    if (userIndex === -1) {
-      post.numberOfLikes += 1;
-      post.likes.push(req.user.id);
+    const userId = req.user.id;
+
+    const alreadyLiked = post.likedBy.includes(userId);
+
+    if (alreadyLiked) {
+      post.likedBy = post.likedBy.filter((id) => id !== userId);
+      post.likes -= 1;
     } else {
-      post.numberOfLikes -= 1;
-      post.likes.splice(userIndex, 1);
+      post.likedBy.push(userId);
+      post.likes += 1;
     }
+
     await post.save();
-    res.status(200).json(post);
+
+    res.status(200).json({
+      message: alreadyLiked
+        ? "Post unliked successfully"
+        : "Post liked successfully",
+      post,
+    });
   } catch (error) {
     next(error);
   }
