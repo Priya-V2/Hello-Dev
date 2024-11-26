@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PostCard from "../Component/PostCard";
+import { FaArrowUp } from "react-icons/fa6";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -66,6 +67,12 @@ export default function Home() {
           </button>
         )}
       </div>
+      <button
+        onClick={() => window.scrollTo(0, 0)}
+        className="p-2 lg:p-3 rounded-full shadow-custom-indigo fixed bottom-8 right-2 sm:right-4 xl:right-8"
+      >
+        <FaArrowUp className="w-4 h-4" />
+      </button>
     </div>
   );
 }

@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import CommentSection from "../Component/CommentSection";
 import PostCard from "../Component/PostCard";
 import PostContent from "../Component/PostContent";
-import ScrollToTop from "../Component/ScrollToTop.js";
 import { FaArrowUp } from "react-icons/fa";
 import { FaThumbsUp } from "react-icons/fa6";
 import { useSelector } from "react-redux";
