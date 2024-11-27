@@ -5,7 +5,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import React, { useRef, useState } from "react";
-import ReactQuill, { Quill } from "react-quill";
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -14,9 +14,10 @@ import { useNavigate } from "react-router-dom";
 
 const toolbarOptions = [
   [{ header: [1, 2, 3, false] }],
-  ["bold", "italic", "underline"],
-  [{ list: "ordered" }, { list: "bullet" }],
-  ["link", "code-block"],
+  ["bold", "italic", "underline", "blockquote"],
+  [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+  [{ align: [] }],
+  ["link", "image", "code-block"],
 ];
 
 const modules = {
