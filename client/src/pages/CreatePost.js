@@ -128,6 +128,17 @@ export default function CreatePost() {
     }
   };
 
+  const handleAddTagsFromInput = (e) => {
+    let a = e.target.value;
+    console.log(a);
+    const inputTags = a.split(",").map((tag) => tag.trim());
+    console.log(inputTags);
+    setFormData({
+      ...formData,
+      tags: inputTags,
+    });
+  };
+
   return (
     <div className="min-h-screen text-base text-center text-dark-charcoal font-roboto mx-auto max-w-sm sm:max-w-lg md:max-w-2xl xl:max-w-3xl">
       <h1 className="text-3xl font-semibold my-6">Create a post</h1>
@@ -171,6 +182,14 @@ export default function CreatePost() {
             <option value="nodejs">Node.js</option>
           </select>
         </div>
+        <input
+          type="tag"
+          id="tag"
+          name="tag"
+          placeholder="Add tags here by sepreating it with comma"
+          className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
+          onChange={handleAddTagsFromInput}
+        />
         <input
           type="file"
           accept="image/*"
