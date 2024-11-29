@@ -4,7 +4,13 @@ import CommentSection from "../Component/CommentSection";
 import PostCard from "../Component/PostCard";
 import PostContent from "../Component/PostContent";
 import { FaArrowUp } from "react-icons/fa";
-import { FaThumbsUp } from "react-icons/fa6";
+import {
+  FaBookmark,
+  FaComment,
+  FaEye,
+  FaShare,
+  FaThumbsUp,
+} from "react-icons/fa6";
 import { useSelector } from "react-redux";
 
 export default function PostPage() {
@@ -111,27 +117,32 @@ export default function PostPage() {
   }
   return (
     <main className="font-roboto text-base text-dark-charcoal max-w-5xl mx-auto min-h-screen p-5 md:p-8">
-      <span className="block text-sm text-gray-500 text-center mb-2">
-        {post &&
-          new Date(post.createdAt).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-      </span>
-      <div className="flex gap-2 content-center justify-center text-sm text-gray-500 text-center mb-4">
-        <button onClick={handleLike}>
-          <FaThumbsUp className="text-sm self-center text-gray-500"></FaThumbsUp>
-        </button>
-        <span className="self-center">{likes}</span>
+      <div className="flex justify-between text-neutral-500 max-w-3xl mb-4 mx-auto p-2 border-b-2">
+        <span className="block text-sm text-gray-500 text-center">
+          {post &&
+            new Date(post.createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+        </span>
+        <div className="flex gap-3">
+          <FaThumbsUp className="text-neutral-500"></FaThumbsUp>
+          <FaComment />
+          <FaEye />
+          <FaShare />
+          <FaBookmark />
+        </div>
       </div>
+
       <h1 className="font-medium text-2xl sm:text-3xl lg:text-4xl text-center mb-4">
         {post && post.title}
       </h1>
+
       <img
         src={post && post.image}
         alt={post && post.title}
-        className="w-full max-h-[600px] p-4 object-cover"
+        className="w-full max-h-[600px] mx-auto p-4 object-cover"
       />
 
       <PostContent post={post} />
