@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CommentSection from "../Component/CommentSection";
 import PostCard from "../Component/PostCard";
@@ -22,6 +22,7 @@ export default function PostPage() {
   const [likes, setLikes] = useState("No likes yet!");
   const { postSlug } = useParams();
   const navigate = useNavigate();
+  const commentSectionRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -104,6 +105,12 @@ export default function PostPage() {
     }
   };
 
+  const handleScrollToComments = () => {
+    if (commentSectionRef.current) {
+      commentSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -126,12 +133,25 @@ export default function PostPage() {
               day: "numeric",
             })}
         </span>
-        <div className="flex gap-3">
-          <FaThumbsUp className="text-neutral-500"></FaThumbsUp>
-          <FaComment />
-          <FaEye />
-          <FaShare />
-          <FaBookmark />
+        <div className="flex gap-4">
+          <div className="flex gap-1">
+            <button onClick={handleLike}>
+              <FaThumbsUp className="text-neutral-500" />
+            </button>
+            <span>{likes}</span>
+          </div>
+          <button onClick={handleScrollToComments}>
+            <FaComment />
+          </button>
+          <button>
+            <FaEye />
+          </button>
+          <button>
+            <FaShare />
+          </button>
+          <button>
+            <FaBookmark />
+          </button>
         </div>
       </div>
 
@@ -147,7 +167,7 @@ export default function PostPage() {
 
       <PostContent post={post} />
 
-      <CommentSection postId={post && post._id} />
+      <CommentSection ref={commentSectionRef} postId={post && post._id} />
 
       <div className="lg:max-w-6xl w-full mx-auto">
         <h3 className="font-medium text-base lg:text-xl text-center mt-8 mb-2 sm:mb-4">
