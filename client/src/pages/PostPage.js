@@ -22,7 +22,6 @@ export default function PostPage() {
   const [likes, setLikes] = useState("No likes yet!");
   const { postSlug } = useParams();
   const navigate = useNavigate();
-  const commentSectionRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -105,10 +104,17 @@ export default function PostPage() {
     }
   };
 
-  const handleScrollToComments = () => {
-    if (commentSectionRef.current) {
-      commentSectionRef.current.scrollIntoView({ behavior: "smooth" });
+  useEffect(() => {
+    if (window.location.hash === "#comments") {
+      const commentSection = document.getElementById("comments");
+      if (commentSection) {
+        commentSection.scrollIntoView({ behavior: "smooth" });
+      }
     }
+  }, [window.location.hash]);
+
+  const handleNavigateToComments = () => {
+    navigate("#comments");
   };
 
   if (loading) {
@@ -125,26 +131,29 @@ export default function PostPage() {
   return (
     <main className="font-roboto text-base text-dark-charcoal max-w-5xl mx-auto min-h-screen p-5 md:p-8">
       <div className="flex justify-between text-neutral-500 max-w-3xl mb-4 mx-auto p-2 border-b-2">
-        <span className="block text-sm text-gray-500 text-center">
-          {post &&
-            new Date(post.createdAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-        </span>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-2">
+          <span className="block text-sm text-gray-500 text-center">
+            {post &&
+              new Date(post.createdAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+          </span>
+          <div className="flex items-center gap-1 border-l-2 pl-2">
+            <FaEye className="text-neutral-500" />
+            <span>{post && post.views}</span>
+          </div>
+        </div>
+        <div className="flex gap-4 text-neutral-500">
           <div className="flex gap-1">
             <button onClick={handleLike}>
-              <FaThumbsUp className="text-neutral-500" />
+              <FaThumbsUp />
             </button>
             <span>{likes}</span>
           </div>
-          <button onClick={handleScrollToComments}>
+          <button onClick={handleNavigateToComments}>
             <FaComment />
-          </button>
-          <button>
-            <FaEye />
           </button>
           <button>
             <FaShare />
@@ -167,7 +176,7 @@ export default function PostPage() {
 
       <PostContent post={post} />
 
-      <CommentSection ref={commentSectionRef} postId={post && post._id} />
+      <CommentSection postId={post && post._id} />
 
       <div className="lg:max-w-6xl w-full mx-auto">
         <h3 className="font-medium text-base lg:text-xl text-center mt-8 mb-2 sm:mb-4">
