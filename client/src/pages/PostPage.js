@@ -5,9 +5,9 @@ import PostCard from "../Component/PostCard";
 import PostContent from "../Component/PostContent";
 import { FaArrowUp } from "react-icons/fa";
 import {
-  FaBookmark,
-  FaComment,
   FaEye,
+  FaRegBookmark,
+  FaRegComment,
   FaShare,
   FaThumbsUp,
 } from "react-icons/fa6";
@@ -153,13 +153,13 @@ export default function PostPage() {
             <span>{likes}</span>
           </div>
           <button onClick={handleNavigateToComments}>
-            <FaComment />
+            <FaRegComment />
           </button>
           <button>
             <FaShare />
           </button>
           <button>
-            <FaBookmark />
+            <FaRegBookmark />
           </button>
         </div>
       </div>
