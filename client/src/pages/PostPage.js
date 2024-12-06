@@ -12,11 +12,13 @@ import {
   FaThumbsUp,
 } from "react-icons/fa6";
 import { useSelector } from "react-redux";
+import SharePost from "../Component/SharePost";
 
 export default function PostPage() {
   const { currentUser } = useSelector((store) => store.user);
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const [error, setError] = useState(null);
   const [relatedPosts, setRelatedPosts] = useState(null);
   const [likes, setLikes] = useState("No likes yet!");
@@ -155,7 +157,7 @@ export default function PostPage() {
           <button onClick={handleNavigateToComments}>
             <FaRegComment />
           </button>
-          <button>
+          <button onClick={() => setShowShare(true)}>
             <FaShare />
           </button>
           <button>
@@ -163,6 +165,7 @@ export default function PostPage() {
           </button>
         </div>
       </div>
+      {showShare && <SharePost title={post && post.title} />}
 
       <h1 className="font-medium text-2xl sm:text-3xl lg:text-4xl text-center mb-4">
         {post && post.title}
