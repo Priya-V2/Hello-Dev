@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signoutUserSuccess } from "../redux/user/userSlice";
 import { RiLogoutBoxRLine } from "react-icons/ri";
-import { FaSearch, FaUser, FaUserCircle } from "react-icons/fa";
+import { FaSearch, FaUser } from "react-icons/fa";
 import { IoMenu } from "react-icons/io5";
+import Search from "./Search";
 
 function Header() {
   const [isSearchOnFocus, setIsSearchOnFocus] = useState(false);
   const [menuDisplay, setMenuDisplay] = useState(false);
   const [dropDownDisplay, setDropDownDisplay] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { currentUser } = useSelector((store) => store.user);
 
   const dispatch = useDispatch();
@@ -83,7 +85,9 @@ function Header() {
                   placeholder="Search..."
                   onFocus={() => setIsSearchOnFocus(true)}
                   onBlur={() => setIsSearchOnFocus(false)}
-                  className="focus:outline-none text-xs lg:text-sm w-14 sm:w-16 lg:w-32 focus:w-20 sm:focus:w-40 lg:focus:w-60 transition-width duration-300"
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchQuery}
+                  className="focus:outline-none text-xs text-dark-charcoal lg:text-sm w-14 sm:w-16 lg:w-32 focus:w-20 sm:focus:w-40 lg:focus:w-60 transition-width duration-300"
                 />
               </form>
               <FaSearch className="text-midnight-indigo w-4 h-4 lg-w-6" />
@@ -123,6 +127,9 @@ function Header() {
           </ul>
         </div>
       </nav>
+
+      {searchQuery && <Search query={searchQuery} />}
+
       <div
         className={`${
           dropDownDisplay ? "absolute" : "hidden"
@@ -146,6 +153,7 @@ function Header() {
           <a href="#">Sign out</a>
         </div>
       </div>
+
       {menuDisplay && (
         <div
           className={`absolute top-0 left-0 bg-white w-screen h-screen text-dark-charcoal text-base transform transition-transform duration-1000 ease-in-out ${
@@ -167,7 +175,9 @@ function Header() {
                   placeholder="Search..."
                   onFocus={() => setIsSearchOnFocus(true)}
                   onBlur={() => setIsSearchOnFocus(false)}
-                  className="focus:outline-none text-sm text-white w-52 focus:w-60 transition-width duration-300"
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchQuery}
+                  className="focus:outline-none text-sm text-dark-charcoal w-52 focus:w-60 transition-width duration-300"
                 />
               </form>
               <FaSearch className="text-midnight-indigo w-6 h-4" />
