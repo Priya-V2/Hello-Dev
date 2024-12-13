@@ -31,6 +31,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "babel": {
+    "plugins": [
+      "@babel/plugin-proposal-private-property-in-object"
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -50,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "tailwindcss": "^3.4.15"
   }
 }
