@@ -39,7 +39,7 @@ export default function SharePost({ title }) {
   };
 
   return (
-    <div className="flex gap-2 text-base text-neutral-500">
+    <div className="flex gap-2 text-base text-neutral-500 bg-gray-100 px-6 rounded-md py-3 w-min">
       <button onClick={handleCopy}>
         {copySuccess ? (
           <FaCheck className="text-green-700" />

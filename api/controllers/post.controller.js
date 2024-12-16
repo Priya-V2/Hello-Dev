@@ -158,9 +158,9 @@ const likePost = async (req, res, next) => {
     }
     const userId = req.user.id;
 
-    const alreadyLiked = post.likedBy.includes(userId);
+    const liked = post.likedBy.includes(userId);
 
-    if (alreadyLiked) {
+    if (liked) {
       post.likedBy = post.likedBy.filter((id) => id !== userId);
       post.likes -= 1;
     } else {
@@ -171,10 +171,9 @@ const likePost = async (req, res, next) => {
     await post.save();
 
     res.status(200).json({
-      message: alreadyLiked
-        ? "Post unliked successfully"
-        : "Post liked successfully",
+      message: liked ? "Post unliked successfully" : "Post liked successfully",
       post,
+      liked,
     });
   } catch (error) {
     next(error);

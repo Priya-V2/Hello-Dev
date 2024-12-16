@@ -22,6 +22,7 @@ export default function PostPage() {
   const [error, setError] = useState(null);
   const [relatedPosts, setRelatedPosts] = useState(null);
   const [likes, setLikes] = useState("No likes yet!");
+  const [like, setLike] = useState(false);
   const { postSlug } = useParams();
   const navigate = useNavigate();
 
@@ -94,13 +95,15 @@ export default function PostPage() {
           method: "PUT",
         }
       );
+
       const data = await res.json();
 
       if (!res.ok) {
         setError(data.message);
-      } else {
-        setLikes(data.post.likes);
       }
+      const liked = !data.liked;
+      setLikes(data.post.likes);
+      setLike(liked);
     } catch (error) {
       setError(error.message);
     }
@@ -132,6 +135,11 @@ export default function PostPage() {
   }
   return (
     <main className="font-roboto text-base text-dark-charcoal max-w-5xl mx-auto min-h-screen p-5 md:p-8">
+      {showShare && (
+        <div className="flex justify-end max-w-3xl mb-2 mx-auto">
+          <SharePost title={post && post.title} />
+        </div>
+      )}
       <div className="flex justify-between text-neutral-500 max-w-3xl mb-4 mx-auto p-2 border-b-2">
         <div className="flex items-center gap-2">
           <span className="block text-sm text-gray-500 text-center">
@@ -149,7 +157,10 @@ export default function PostPage() {
         </div>
         <div className="flex gap-4 text-neutral-500">
           <div className="flex gap-1">
-            <button onClick={handleLike}>
+            <button
+              onClick={handleLike}
+              className={`${like ? "text-blue-600" : "text-neutral-500"}`}
+            >
               <FaThumbsUp />
             </button>
             <span>{likes}</span>
@@ -157,7 +168,7 @@ export default function PostPage() {
           <button onClick={handleNavigateToComments}>
             <FaRegComment />
           </button>
-          <button onClick={() => setShowShare(true)}>
+          <button onClick={() => setShowShare((showShare) => !showShare)}>
             <FaShare />
           </button>
           <button>
@@ -165,7 +176,6 @@ export default function PostPage() {
           </button>
         </div>
       </div>
-      {showShare && <SharePost title={post && post.title} />}
 
       <h1 className="font-medium text-2xl sm:text-3xl lg:text-4xl text-center mb-4">
         {post && post.title}
