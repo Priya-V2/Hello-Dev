@@ -65,7 +65,7 @@ const signin = async (req, res, next) => {
       { id: validUser._id, isAdmin: validUser.isAdmin },
       process.env.JWT_SECRET,
       {
-        expiresIn: "2d",
+        expiresIn: "30d",
       }
     );
     res
@@ -95,7 +95,7 @@ const googleCallback = (req, res) => {
       { id: user._id, isAdmin: user.isAdmin },
       process.env.JWT_SECRET,
       {
-        expiresIn: "2d",
+        expiresIn: "30d",
       }
     );
 
