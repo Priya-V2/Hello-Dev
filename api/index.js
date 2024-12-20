@@ -7,6 +7,7 @@ import cors from "cors";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import postRoutes from "./routes/post.route.js";
+import settingsRoutes from "./routes/settings.route.js";
 import commentRoutes from "./routes/comment.route.js";
 import "./config/auth.config.js";
 import cookieParser from "cookie-parser";
@@ -45,6 +46,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
+app.use("/api/settings", settingsRoutes);
 
 mongoose
   .connect(process.env.MONGODB_URI)
