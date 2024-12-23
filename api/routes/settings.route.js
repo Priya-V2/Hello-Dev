@@ -1,9 +1,13 @@
 import express from "express";
-import { verifyToken } from "../utils/verifyUser";
-import { updateSetting } from "../controllers/settings.controller";
+import { verifyToken } from "../utils/verifyUser.js";
+import {
+  getSetting,
+  updateSetting,
+} from "../controllers/settings.controller.js";
 
 const router = express.Router();
 
-router.post("/updateSetting/:userId", verifyToken, updateSetting);
+router.get("/getSetting", getSetting);
+router.patch("/update-setting/:userId", verifyToken, updateSetting);
 
 export default router;
