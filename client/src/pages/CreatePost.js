@@ -4,13 +4,15 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { BsExclamationCircle } from "react-icons/bs";
 
 const toolbarOptions = [
   [{ header: [1, 2, 3, false] }],
@@ -25,12 +27,18 @@ const modules = {
 };
 
 export default function CreatePost() {
+  const { currentUser } = useSelector((state) => state.user);
   const filePickerRef = useRef();
   const [fileName, setFileName] = useState(null);
   const [file, setFile] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [formData, setFormData] = useState({});
+  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState([]);
+  const [predefinedTags, setPredefinedTags] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState(null);
   const [publishError, setPublishError] = useState(null);
   const navigate = useNavigate();
 
@@ -110,7 +118,7 @@ export default function CreatePost() {
       const res = await fetch("/api/post/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, content: formattedContent }),
+        body: JSON.stringify({ ...formData, content: formattedContent, tags }),
       });
 
       const data = await res.json();
@@ -128,15 +136,42 @@ export default function CreatePost() {
     }
   };
 
-  const handleAddTagsFromInput = (e) => {
-    let a = e.target.value;
-    console.log(a);
-    const inputTags = a.split(",").map((tag) => tag.trim());
-    console.log(inputTags);
-    setFormData({
-      ...formData,
-      tags: inputTags,
-    });
+  const handleAddTag = () => {
+    const trimmedTag = tag.trim().toLowerCase();
+
+    if (!trimmedTag) {
+      alert("Please enter a tag name");
+    }
+  };
+
+  const handleAddTagToDatabase = async () => {
+    const trimmedTag = tag.trim().toLowerCase();
+
+    if (!trimmedTag) {
+      setError("Please enter a tag name");
+    }
+
+    try {
+      const res = await fetch(
+        `/api/settings/update-setting/${currentUser._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ trimmedTag }),
+        }
+      );
+      const data = res.json();
+
+      if (!res.ok) {
+        setError(data.message);
+      }
+
+      setPredefinedTags(data.predefinedTags);
+      console.log("tags :", tags);
+      console.log("predefinedtags :", predefinedTags);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -152,6 +187,11 @@ export default function CreatePost() {
           <span>{publishError}</span>
         </div>
       )}
+      {error && (
+        <div className="text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
+          <span>{error}</span>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col sm:flex-row sm:gap-4 justify-between">
           <input
@@ -164,6 +204,8 @@ export default function CreatePost() {
               setFormData({ ...formData, title: e.target.value })
             }
           />
+        </div>
+        <div className="flex flex-col sm:flex-row gap-4">
           <select
             name="label"
             id="label"
@@ -181,15 +223,30 @@ export default function CreatePost() {
             <option value="reactjs">React.js</option>
             <option value="nodejs">Node.js</option>
           </select>
+          <input
+            type="tag"
+            id="tag"
+            name="tag"
+            placeholder="Add tags here"
+            className="w-min p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
+            onChange={(e) => setTag(e.target.value)}
+          />
+
+          <button
+            type="button"
+            className="w-32 p-2 mt-1 mb-2 border-2 bg-gray-200 rounded hover:bg-gray-500 hover:text-white hover:border-gray-500"
+            onClick={handleAddTag}
+          >
+            Add tag
+          </button>
+          <button
+            type="button"
+            className="w-52 p-2 mt-1 mb-2 border-2 bg-gray-200 rounded hover:bg-gray-500 hover:text-white hover:border-gray-500"
+            onClick={() => setShowModal(true)}
+          >
+            Add new tag to DB
+          </button>
         </div>
-        <input
-          type="tag"
-          id="tag"
-          name="tag"
-          placeholder="Add tags here by sepreating it with comma"
-          className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
-          onChange={handleAddTagsFromInput}
-        />
         <input
           type="file"
           accept="image/*"
@@ -251,6 +308,38 @@ export default function CreatePost() {
           Publish
         </button>
       </form>
+      {showModal && (
+        <div>
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 sm:w-96 text-base text-center bg-white px-6 py-8 rounded-md shadow-lg z-10 ">
+            <button
+              className="absolute top-2 right-4 text-3xl text-gray-800 cursor-pointer bg-none"
+              onClick={() => setShowModal(false)}
+            >
+              &times;
+            </button>
+            <BsExclamationCircle className="text-gray-500 w-8 sm:w-12 h-8 sm:h-12 mx-auto mb-4 sm:mb-6" />
+            <span className="text-base sm:text-lg text-gray-500 w-4">
+              Are you sure you want add {tag} to the database?
+            </span>
+            <div className="flex gap-4 justify-center mt-4">
+              <button
+                className="text-white text-sm bg-red-600 px-4 py-2 rounded-md"
+                onClick={() => handleAddTagToDatabase()}
+              >
+                Yes, I'm sure
+              </button>
+              <button
+                className="text-sm border px-4 py-2 rounded-md"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-10 backdrop-blur-sm z-5"></div>
+        </div>
+      )}
     </div>
   );
 }
