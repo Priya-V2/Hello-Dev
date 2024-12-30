@@ -155,9 +155,9 @@ export default function CreatePost() {
       const res = await fetch(
         `/api/settings/update-setting/${currentUser._id}`,
         {
-          method: "PUT",
+          method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ trimmedTag }),
+          body: JSON.stringify({ tag: trimmedTag }),
         }
       );
       const data = res.json();
@@ -324,7 +324,10 @@ export default function CreatePost() {
             <div className="flex gap-4 justify-center mt-4">
               <button
                 className="text-white text-sm bg-red-600 px-4 py-2 rounded-md"
-                onClick={() => handleAddTagToDatabase()}
+                onClick={() => {
+                  handleAddTagToDatabase();
+                  setShowModal(false);
+                }}
               >
                 Yes, I'm sure
               </button>
