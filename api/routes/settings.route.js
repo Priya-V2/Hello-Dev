@@ -7,7 +7,7 @@ import {
 
 const router = express.Router();
 
-router.get("/getSetting", getSetting);
+router.get("/get-setting", getSetting);
 router.patch("/update-setting/:userId", verifyToken, updateSetting);
 
 export default router;

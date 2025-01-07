@@ -43,6 +43,9 @@ export default function CreatePost() {
   const navigate = useNavigate();
 
   const replacePreTagsWithCode = (content) => {
+    if (!content || typeof content !== "string") {
+      return "";
+    }
     return content
       .replace(
         /<pre class="ql-syntax" spellcheck="false">/g,
@@ -105,7 +108,7 @@ export default function CreatePost() {
     } catch (error) {
       setImageFileUploadError("Image upload failed");
       setImageFileUploadProgress(null);
-      console.log(error);
+      setError(error.message);
     }
   };
 
@@ -136,11 +139,39 @@ export default function CreatePost() {
     }
   };
 
-  const handleAddTag = () => {
+  useEffect(() => {
+    const getPredefinedTags = async () => {
+      try {
+        const res = await fetch("/api/settings/get-setting");
+        const data = await res.json();
+
+        if (!res.ok) {
+          setError(data.message);
+        }
+
+        setPredefinedTags(data.predefinedTags);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    getPredefinedTags();
+  }, []);
+
+  const handleAddTag = (e) => {
+    e.preventDefault();
+
     const trimmedTag = tag.trim().toLowerCase();
 
     if (!trimmedTag) {
       alert("Please enter a tag name");
+    }
+
+    if (!predefinedTags.includes(trimmedTag)) {
+      alert(`Invalid tag! Please enter a valid tag from the following tags:
+${predefinedTags.join(", ")}`);
+    } else {
+      setTags((prevState) => [...prevState, trimmedTag]);
+      setTag("");
     }
   };
 
@@ -160,22 +191,26 @@ export default function CreatePost() {
           body: JSON.stringify({ tag: trimmedTag }),
         }
       );
-      const data = res.json();
+      const data = await res.json();
 
       if (!res.ok) {
         setError(data.message);
       }
 
       setPredefinedTags(data.predefinedTags);
-      console.log("tags :", tags);
-      console.log("predefinedtags :", predefinedTags);
     } catch (error) {
-      console.log(error);
+      setError(error.message);
     }
   };
 
+  const removeTag = (indexToRemove) => {
+    setTags((prevTags) =>
+      prevTags.filter((_, index) => index !== indexToRemove)
+    );
+  };
+
   return (
-    <div className="min-h-screen text-base text-center text-dark-charcoal font-roboto mx-auto max-w-sm sm:max-w-lg md:max-w-2xl xl:max-w-3xl">
+    <div className="min-h-screen text-sm sm:text-base text-center text-dark-charcoal font-roboto mx-auto max-w-sm sm:max-w-xl md:max-w-2xl xl:max-w-3xl p-4">
       <h1 className="text-3xl font-semibold my-6">Create a post</h1>
       {imageFileUploadError && (
         <div className="text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
@@ -205,7 +240,7 @@ export default function CreatePost() {
             }
           />
         </div>
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 text-base sm:text-xs lg:text-sm">
           <select
             name="label"
             id="label"
@@ -228,25 +263,45 @@ export default function CreatePost() {
             id="tag"
             name="tag"
             placeholder="Add tags here"
-            className="w-min p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
+            className="w-full sm:w-min p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
+            value={tag}
             onChange={(e) => setTag(e.target.value)}
           />
 
           <button
             type="button"
-            className="w-32 p-2 mt-1 mb-2 border-2 bg-gray-200 rounded hover:bg-gray-500 hover:text-white hover:border-gray-500"
+            className="w-full sm:w-32 p-2 mt-1 mb-2 border-2 bg-gray-200 rounded hover:bg-gray-500 hover:text-white hover:border-gray-500"
             onClick={handleAddTag}
           >
             Add tag
           </button>
           <button
             type="button"
-            className="w-52 p-2 mt-1 mb-2 border-2 bg-gray-200 rounded hover:bg-gray-500 hover:text-white hover:border-gray-500"
+            className="w-full sm:w-52 p-2 mt-1 mb-2 border-2 bg-gray-200 rounded hover:bg-gray-500 hover:text-white hover:border-gray-500"
             onClick={() => setShowModal(true)}
           >
             Add new tag to DB
           </button>
         </div>
+
+        {tags && (
+          <div className="flex flex-wrap gap-4 max-w-6xl my-6">
+            {tags.map((tag, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex justify-between gap-6 px-4 py-1 border border-gray-600 rounded-full"
+                >
+                  <p>{tag}</p>
+                  <button type="button" onClick={() => removeTag(index)}>
+                    &times;
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         <input
           type="file"
           accept="image/*"
@@ -319,7 +374,9 @@ export default function CreatePost() {
             </button>
             <BsExclamationCircle className="text-gray-500 w-8 sm:w-12 h-8 sm:h-12 mx-auto mb-4 sm:mb-6" />
             <span className="text-base sm:text-lg text-gray-500 w-4">
-              Are you sure you want add {tag} to the database?
+              Are you sure you want add{" "}
+              <strong className="text-grey-">"{tag}"</strong>
+              to the database?
             </span>
             <div className="flex gap-4 justify-center mt-4">
               <button
