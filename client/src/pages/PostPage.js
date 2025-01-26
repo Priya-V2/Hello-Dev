@@ -16,7 +16,7 @@ import SharePost from "../Component/SharePost";
 
 export default function PostPage() {
   const { currentUser } = useSelector((store) => store.user);
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState({});
   const [loading, setLoading] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [error, setError] = useState(null);
@@ -180,6 +180,18 @@ export default function PostPage() {
       <h1 className="font-medium text-2xl sm:text-3xl lg:text-4xl text-center mb-4">
         {post && post.title}
       </h1>
+
+      {post.tags && (
+        <div className="flex justify-center gap-4 max-w-6xl mt-4 mb-2">
+          {post.tags.map((tag, index) => {
+            return (
+              <p key={index} className="text-sm px-4 py-2 border rounded-full">
+                {tag}
+              </p>
+            );
+          })}
+        </div>
+      )}
 
       <img
         src={post && post.image}
