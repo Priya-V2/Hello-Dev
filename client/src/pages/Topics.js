@@ -1,5 +1,132 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { FaSearch } from "react-icons/fa";
+import Search from "../Component/Search";
+import { FiFilter } from "react-icons/fi";
 
 export default function Topics() {
-  return <div>Topics</div>;
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [predefinedTags, setPredefinedTags] = useState([
+    "html",
+    "css",
+    "javascript",
+    "semantic html",
+    "forms",
+    "flexbox",
+    "grid layout",
+    "media queries",
+    "responsive design",
+    "beginner",
+    "intermediate",
+    "advanced",
+    "tutorial series",
+    "roadmap",
+    "project",
+    "cheat sheet",
+    "challenge",
+    "oops",
+  ]);
+  const handleSelectedTags = (id) => {
+    const tag = predefinedTags[id];
+    console.log(tag);
+    setSelectedTags((prevState) => {
+      if (prevState.includes(tag)) {
+        return prevState.filter((x) => x !== tag);
+      }
+      return [...prevState, tag];
+    });
+  };
+  useEffect(() => {
+    console.log("Updated selectedTags:", selectedTags);
+  }, [selectedTags]);
+
+  // useEffect(() => {
+  //   try {
+  //     const getPredefinedTags = async () => {
+  //       const res = await fetch("/api/settings/get-setting", {
+  //         request: "GET",
+  //       });
+
+  //       const data = await res.json();
+  //       if (res.ok) {
+  //         setPredefinedTags(data.predefinedTags);
+  //       }
+  //     };
+  //     getPredefinedTags();
+  //     console.log(predefinedTags);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, []);
+
+  return (
+    <div className="text-[8px] sm:text-xs lg:text-sm text-dark-charcoal max-w-lg sm:max-w-2xl lg:max-w-4xl mx-auto mt-10 mb-20 md:mb-0 h-screen">
+      <div className="flex items-center justify-between gap-8 px-4 py-2 mx-8 mb-4 border rounded">
+        <form>
+          <input
+            type="search"
+            name="search"
+            id="search"
+            placeholder="Search..."
+            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchQuery}
+            className="w-[256px] sm:w-[512px] lg:w-[672px] focus:outline-none"
+          />
+        </form>
+        <FaSearch className="text-midnight-indigo w-5 sm:w-6 h-3 sm:h-4" />
+      </div>
+
+      {searchQuery && <Search query={searchQuery} />}
+
+      <div className="flex gap-3 items-center font-medium text-sm md:text-base uppercase tracking-wider mb-4 md:mb-6 mx-12">
+        <FiFilter />
+        <span>Filters</span>
+      </div>
+
+      <div className="flex flex-wrap overflow-visible gap-3 px-12">
+        {predefinedTags.map((tag, index) => (
+          <button
+            key={index}
+            className={`font-medium uppercase tracking-wider min-w-max px-2 sm:px-4 py-1 border rounded-full hover:cursor-pointer hover:shadow-custom-indigo
+              ${selectedTags.includes(tag) ? "bg-neutral-500 text-white" : ""}
+            `}
+            onClick={() => handleSelectedTags(index)}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+
+      {/* 
+      if (prevState.includes(tag)) {
+        return prevState.filter((t) => t !== tag);
+      }
+      return [...prevState, tag];
+
+      <div className="flex flex-wrap overflow-visible gap-3 px-12">
+        {predefinedTags.map((tag, index) => {
+          return selectedTags.map((selectedTag) => {
+            return tag === selectedTag ? (
+              <button
+                key={index}
+                className="flex gap-4 justify-between uppercase font-medium tracking-wider min-w-max px-4 py-1 border rounded-full hover:cursor-pointer hover:shadow-custom-indigo"
+                onClick={() => handleSelectedTags(index)}
+              >
+                <span>{tag}</span>
+                <span>&times;</span>
+              </button>
+            ) : (
+              <button
+                key={index}
+                className="uppercase font-medium tracking-wider min-w-max px-4 py-1 border rounded-full hover:cursor-pointer hover:shadow-custom-indigo"
+                onClick={() => handleSelectedTags(index)}
+              >
+                {tag}
+              </button>
+            );
+          });
+        })}
+      </div> */}
+    </div>
+  );
 }
