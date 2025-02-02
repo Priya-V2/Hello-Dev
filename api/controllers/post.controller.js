@@ -113,6 +113,25 @@ const getPosts = async (req, res, next) => {
   }
 };
 
+const filterPosts = async (req, res, next) => {
+  try {
+    const selectedTagsStr = req.query.selectedTags || [];
+    let filteredPost = [];
+
+    const selectedTagsArr = Array.isArray(selectedTagsStr)
+      ? selectedTagsStr
+      : selectedTagsStr?.split(",").filter((tag) => tag.trim() !== "") || [];
+
+    if (selectedTagsArr.length > 0) {
+      filteredPost = await Post.find({ tags: { $in: selectedTagsArr } });
+    }
+
+    res.status(200).json({ filteredPost });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updatePost = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You're not allowed to update this post"));
@@ -181,4 +200,4 @@ const likePost = async (req, res, next) => {
   }
 };
 
-export { create, getPosts, updatePost, deletePost, likePost };
+export { create, getPosts, filterPosts, updatePost, deletePost, likePost };
