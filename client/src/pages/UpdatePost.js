@@ -31,14 +31,8 @@ export default function UpdatePost() {
   const [file, setFile] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
-  const [formData, setFormData] = useState({
-    title: "",
-    category: "",
-    tags: [],
-    image: "",
-    content: "",
-    slug: "",
-  });
+  const [formData, setFormData] = useState({});
+  const [postImageURL, setPostImageURL] = useState("");
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
   const [predefinedTags, setPredefinedTags] = useState([]);
@@ -68,6 +62,7 @@ export default function UpdatePost() {
         } else {
           setPublishError(null);
           setFormData(data.posts[0]);
+          setPostImageURL(data.posts[0].image);
           setTags(() => [...data.posts[0].tags]);
         }
       };
@@ -76,7 +71,7 @@ export default function UpdatePost() {
     } catch (error) {
       setError(error);
     }
-  }, [postId]);
+  }, []);
 
   useEffect(() => {
     try {
@@ -162,7 +157,7 @@ export default function UpdatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formattedContent = replacePreTagsWithCode(formData.content);
+    const formattedContent = replacePreTagsWithCode(formData?.content);
 
     try {
       const res = await fetch(
@@ -285,7 +280,7 @@ ${predefinedTags.join(", ")}`);
                 slug: modifiedSlug,
               });
             }}
-            value={formData.title}
+            value={formData?.title}
           />
         </div>
         <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 text-base sm:text-xs lg:text-sm">
@@ -296,7 +291,7 @@ ${predefinedTags.join(", ")}`);
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
-            value={formData.category}
+            value={formData?.category}
           >
             <option value="uncategorized">Select a catagory</option>
             <option value="html">HTML</option>
@@ -391,13 +386,15 @@ ${predefinedTags.join(", ")}`);
             {imageFileUploadProgress && <span>Uploading...</span>}
           </button>
         </div>
-        {formData.image && (
+
+        {postImageURL && (
           <img
-            src={formData.image}
-            alt="Upload"
+            src={postImageURL}
+            alt={formData?.title || "this was shown instead"}
             className="max-w-1/2 h-min mb-4"
           />
         )}
+
         <ReactQuill
           theme="snow"
           placeholder="Write Something..."
@@ -405,12 +402,12 @@ ${predefinedTags.join(", ")}`);
           modules={modules}
           onChange={(value) => setFormData({ ...formData, content: value })}
           required
-          value={formData.content}
+          value={formData?.content}
         />
 
         <button
           type="submit"
-          className="w-full font-semibold tracking-wide text-center text-midnight-indigo bg-neon-green border border-midnight-indigo rounded p-2"
+          className="w-full font-semibold tracking-wide text-center text-midnight-indigo mt-2 mb-16 bg-neon-green border border-midnight-indigo rounded p-2"
         >
           Update post
         </button>
