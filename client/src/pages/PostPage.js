@@ -177,7 +177,7 @@ export default function PostPage() {
         </div>
       </div>
 
-      <h1 className="font-medium text-2xl sm:text-3xl lg:text-4xl text-center mb-4">
+      <h1 className="font-semibold text-2xl sm:text-3xl lg:text-4xl text-center mb-4">
         {post && post.title}
       </h1>
 
@@ -185,7 +185,10 @@ export default function PostPage() {
         <div className="flex justify-center gap-4 max-w-6xl mt-4 mb-2">
           {post.tags.map((tag, index) => {
             return (
-              <p key={index} className="text-sm px-4 py-2 border rounded-full">
+              <p
+                key={index}
+                className="text-xs px-4 py-2 font-semibold uppercase tracking-widest border rounded-full"
+              >
                 {tag}
               </p>
             );
