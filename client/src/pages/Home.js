@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PostCard from "../Component/PostCard";
 import { FaArrowUp } from "react-icons/fa6";
+import { FiFilter } from "react-icons/fi";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -45,19 +46,30 @@ export default function Home() {
         <h1 className="text-3xl font-bold lg:text-6xl mb-4">
           Welcome to my Blog
         </h1>
+
         <p className="text-gray-500 text-xs sm:text-sm">
           Here you'll find a variety of articles and tutorials on topics such as
           web development, software engineering, and programming languages.
         </p>
       </div>
-      <div className="lg:max-w-6xl w-full mx-auto mb-24">
-        <h3 className="font-medium text-base lg:text-xl text-center mt-8 mb-2 sm:mb-4">
-          Recent Posts
-        </h3>
-        <div className="grid md:grid-cols-3 sm:grid-cols-2">
+
+      <div className="max-w-7xl w-full mx-auto px-6 sm:px-8 xl:px-0 mb-24">
+        <div className="flex justify-between font-semibold uppercase tracking-wider text-xs sm:text-sm md:text-base mt-8 mb-2 sm:mb-4 px-0 xl:px-2">
+          <p className="">Explore Posts</p>
+          <Link
+            to={"/topics"}
+            className="flex gap-3 items-center hover:text-blue-700 hover:underline"
+          >
+            <FiFilter />
+            <span>Apply Filters</span>
+          </Link>
+        </div>
+
+        <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-6">
           {posts &&
             posts.map((post) => <PostCard key={post._id} relatedPost={post} />)}
         </div>
+
         {showMore && (
           <button
             onClick={handleShowMore}
@@ -67,6 +79,7 @@ export default function Home() {
           </button>
         )}
       </div>
+
       <button
         onClick={() => window.scrollTo(0, 0)}
         className="p-2 lg:p-3 rounded-full shadow-custom-indigo fixed bottom-8 right-2 sm:right-4 xl:right-8"
