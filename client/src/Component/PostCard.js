@@ -10,7 +10,7 @@ export default function PostCard({ relatedPost: post }) {
             src={post && post.image}
             alt={post && post.title}
           />
-          <div class="absolute h-full w-full overflow-hidden bg-neutral-200 rounded bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-40 hover:cursor-pointer"></div>
+          <div className="absolute h-full w-full overflow-hidden bg-neutral-200 rounded bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-40 hover:cursor-pointer"></div>
         </div>
         <p className="font-medium text-base lg:text-lg text-left text-dark-charcoal mt-2 sm:mt-4 hover:text-blue-700 hover:underline hover:cursor-pointer">
           {post && post.title}
