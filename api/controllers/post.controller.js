@@ -123,7 +123,7 @@ const filterPosts = async (req, res, next) => {
       : selectedTagsStr?.split(",").filter((tag) => tag.trim() !== "") || [];
 
     if (selectedTagsArr.length > 0) {
-      filteredPost = await Post.find({ tags: { $in: selectedTagsArr } });
+      filteredPost = await Post.find({ tags: { $all: selectedTagsArr } });
     }
 
     res.status(200).json({ filteredPost });
