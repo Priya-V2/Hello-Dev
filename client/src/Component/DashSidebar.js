@@ -6,6 +6,7 @@ import { FaUser, FaRegFileAlt, FaUsers } from "react-icons/fa";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { LiaCommentsSolid } from "react-icons/lia";
 import { BiSolidDashboard } from "react-icons/bi";
+import { FaRegBookmark } from "react-icons/fa6";
 
 export default function DashSidebar() {
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ export default function DashSidebar() {
             </div>
           </Link>
         )}
+
         <Link to={"/dashboard?tab=profile"}>
           <div
             className={`flex items-center gap-3 text-white rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
@@ -66,6 +68,18 @@ export default function DashSidebar() {
             </span>
           </div>
         </Link>
+
+        <Link to={"/dashboard?tab=bookmark"}>
+          <div
+            className={`flex items-center gap-3 text-white rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
+              tab === "bookmark" && "bg-midnight-indigo-tint"
+            }`}
+          >
+            <FaRegBookmark className="w-4 h-4 ml-2" />
+            <span className="text-base font-medium">Bookmark</span>
+          </div>
+        </Link>
+
         {currentUser.isAdmin && (
           <>
             <Link to={"/dashboard?tab=posts"}>
