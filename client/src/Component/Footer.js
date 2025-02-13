@@ -28,7 +28,7 @@ export default function Footer() {
             <FaLinkedin className="w-5 h-5 text-white" />
           </a>
           <a
-            href="#"
+            href="https://x.com/Priya_v2"
             target="_blank"
             rel="noopener noreferrer"
             className="self-center"
