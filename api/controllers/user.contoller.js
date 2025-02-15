@@ -121,6 +121,35 @@ const updateUser = async (req, res, next) => {
   }
 };
 
+const updateBookmark = async (req, res, next) => {
+  try {
+    const { postId, userId } = req.params;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    if (user.bookmarks.includes(postId)) {
+      user.bookmarks = user.bookmarks.filter((bookmark) => bookmark !== postId);
+    } else {
+      user.bookmarks.push(postId);
+    }
+
+    await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: { bookmarks: user.bookmarks },
+      },
+      { returnDocument: "after" }
+    );
+
+    res.status(200).json("Bookmark updated");
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteUser = async (req, res, next) => {
   if (!req.user.isAdmin && req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You are not allowed to delete this user"));
@@ -144,4 +173,11 @@ const signoutUser = (req, res, next) => {
   }
 };
 
-export { getUsers, getUser, updateUser, deleteUser, signoutUser };
+export {
+  getUsers,
+  getUser,
+  updateUser,
+  updateBookmark,
+  deleteUser,
+  signoutUser,
+};
