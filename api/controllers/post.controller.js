@@ -1,5 +1,6 @@
 import { errorHandler } from "../utils/error.js";
 import Post from "../models/post.model.js";
+import User from "../models/user.model.js";
 
 const create = async (req, res, next) => {
   if (!req.user.isAdmin) {
@@ -113,6 +114,30 @@ const getPosts = async (req, res, next) => {
   }
 };
 
+const getMultiplePosts = async (req, res, next) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    const postIdArr = user.bookmarks;
+
+    if (!postIdArr) {
+      next(errorHandler(400, "No postId is provided"));
+    }
+
+    const posts = await Post.find({ _id: { $in: postIdArr } });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const filterPosts = async (req, res, next) => {
   try {
     const selectedTagsStr = req.query.selectedTags || [];
@@ -200,4 +225,12 @@ const likePost = async (req, res, next) => {
   }
 };
 
-export { create, getPosts, filterPosts, updatePost, deletePost, likePost };
+export {
+  create,
+  getPosts,
+  getMultiplePosts,
+  filterPosts,
+  updatePost,
+  deletePost,
+  likePost,
+};
