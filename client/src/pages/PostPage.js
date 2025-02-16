@@ -5,6 +5,7 @@ import PostCard from "../Component/PostCard";
 import PostContent from "../Component/PostContent";
 import { FaArrowUp } from "react-icons/fa";
 import {
+  FaBookmark,
   FaEye,
   FaRegBookmark,
   FaRegComment,
@@ -19,10 +20,12 @@ export default function PostPage() {
   const [post, setPost] = useState({});
   const [loading, setLoading] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
   const [relatedPosts, setRelatedPosts] = useState(null);
   const [likes, setLikes] = useState("No likes yet!");
-  const [like, setLike] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
   const { postSlug } = useParams();
   const navigate = useNavigate();
 
@@ -40,7 +43,7 @@ export default function PostPage() {
         } else {
           setLoading(false);
           setPost(data.posts[0]);
-          setLikes(data.posts[0].likes);
+          setLikes(data.posts[0].likedBy.length);
         }
       };
       fetchPost();
@@ -89,21 +92,21 @@ export default function PostPage() {
         navigate("/sign-in");
         return;
       }
+
       const res = await fetch(
-        `/api/post/like-post/${post._id}/${currentUser._id}`,
+        `/api/post/update-like/${post._id}/${currentUser._id}`,
         {
           method: "PUT",
         }
       );
-
       const data = await res.json();
 
       if (!res.ok) {
         setError(data.message);
       }
-      const liked = !data.liked;
-      setLikes(data.post.likes);
-      setLike(liked);
+
+      setLikes(data.postLikes.length);
+      setLiked((prevLiked) => !prevLiked);
     } catch (error) {
       setError(error.message);
     }
@@ -122,6 +125,49 @@ export default function PostPage() {
     navigate("#comments");
   };
 
+  const handleBookmark = async (postId) => {
+    if (!currentUser) {
+      alert("Please sign-in to save the post");
+      navigate("/sign-in");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `/api/user/update-bookmark/${postId}/${currentUser._id}`,
+        {
+          method: "PUT",
+        }
+      );
+
+      if (res.ok) {
+        setBookmarked((prevBookmarked) => !prevBookmarked);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!post._id || !currentUser) console.log("Returned");
+
+    const fetchUser = async () => {
+      const res = await fetch(`/api/user/get-User/${currentUser._id}`, {
+        method: "GET",
+      });
+      const data = await res.json();
+
+      currentUser && data.likes.includes(post._id)
+        ? setLiked(true)
+        : setLiked(false);
+
+      currentUser && data.bookmarks.includes(post._id)
+        ? setBookmarked(true)
+        : setBookmarked(false);
+    };
+    fetchUser();
+  }, [post._id]);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -133,6 +179,7 @@ export default function PostPage() {
       </div>
     );
   }
+
   return (
     <main className="font-roboto text-base text-dark-charcoal max-w-5xl mx-auto min-h-screen p-5 md:p-8">
       {showShare && (
@@ -159,7 +206,7 @@ export default function PostPage() {
           <div className="flex gap-1">
             <button
               onClick={handleLike}
-              className={`${like ? "text-blue-600" : "text-neutral-500"}`}
+              className={`${liked ? "text-blue-600" : "text-neutral-500"}`}
             >
               <FaThumbsUp />
             </button>
@@ -171,9 +218,21 @@ export default function PostPage() {
           <button onClick={() => setShowShare((showShare) => !showShare)}>
             <FaShare />
           </button>
-          <button>
-            <FaRegBookmark />
-          </button>
+          {bookmarked ? (
+            <button
+              onClick={() => handleBookmark(post._id)}
+              className="text-red-600"
+            >
+              <FaBookmark />
+            </button>
+          ) : (
+            <button
+              onClick={() => handleBookmark(post._id)}
+              className="text-neutral-500"
+            >
+              <FaRegBookmark />
+            </button>
+          )}
         </div>
       </div>
 
