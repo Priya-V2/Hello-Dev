@@ -127,7 +127,7 @@ const getMultiplePosts = async (req, res, next) => {
     const postIdArr = user.bookmarks;
 
     if (!postIdArr) {
-      next(errorHandler(400, "No postId is provided"));
+      return next(errorHandler(400, "No postId is provided"));
     }
 
     const posts = await Post.find({ _id: { $in: postIdArr } });
@@ -195,6 +195,29 @@ const deletePost = async (req, res, next) => {
   }
 };
 
+const deleteBookmark = async (req, res, next) => {
+  try {
+    const { postId, userId } = req.params;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    if (user.bookmarks.includes(postId)) {
+      user.bookmarks = user.bookmarks.filter((bookmark) => bookmark !== postId);
+      user.save();
+    }
+
+    const postIdArr = user.bookmarks;
+    const posts = await Post.find({ _id: { $in: postIdArr } });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const likePost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId);
@@ -232,5 +255,6 @@ export {
   filterPosts,
   updatePost,
   deletePost,
+  deleteBookmark,
   likePost,
 };
