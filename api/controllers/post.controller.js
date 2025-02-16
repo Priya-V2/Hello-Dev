@@ -218,31 +218,72 @@ const deleteBookmark = async (req, res, next) => {
   }
 };
 
-const likePost = async (req, res, next) => {
+// const likePost = async (req, res, next) => {
+//   try {
+//     const post = await Post.findById(req.params.postId);
+
+//     if (!post) {
+//       return next(errorHandler(404, "Post not found"));
+//     }
+//     const userId = req.user.id;
+
+//     const liked = post.likedBy.includes(userId);
+
+//     if (liked) {
+//       post.likedBy = post.likedBy.filter((id) => id !== userId);
+//       post.likes -= 1;
+//     } else {
+//       post.likedBy.push(userId);
+//       post.likes += 1;
+//     }
+
+//     await post.save();
+
+//     res.status(200).json({
+//       message: liked ? "Post unliked successfully" : "Post liked successfully",
+//       post,
+//       liked,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+const updateLike = async (req, res, next) => {
+  const { postId, userId } = req.params;
+
   try {
-    const post = await Post.findById(req.params.postId);
+    const user = await User.findById(userId);
+    const post = await Post.findById(postId);
+
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
     if (!post) {
       return next(errorHandler(404, "Post not found"));
     }
-    const userId = req.user.id;
 
-    const liked = post.likedBy.includes(userId);
-
-    if (liked) {
-      post.likedBy = post.likedBy.filter((id) => id !== userId);
-      post.likes -= 1;
+    if (user.likes.includes(postId)) {
+      user.likes = user.likes.filter((like) => like !== postId);
+      post.likedBy = post.likedBy.filter((like) => like.toString() !== userId);
     } else {
+      user.likes.push(postId);
       post.likedBy.push(userId);
-      post.likes += 1;
     }
 
-    await post.save();
+    await User.findByIdAndUpdate(
+      userId,
+      { $set: { likes: user.likes } },
+      { new: true }
+    );
+    await Post.findByIdAndUpdate(
+      postId,
+      { $set: { likedBy: post.likedBy } },
+      { new: true }
+    );
 
-    res.status(200).json({
-      message: liked ? "Post unliked successfully" : "Post liked successfully",
-      post,
-      liked,
-    });
+    res.status(200).json({ userLikes: user.likes, postLikes: post.likedBy });
   } catch (error) {
     next(error);
   }
@@ -254,7 +295,7 @@ export {
   getMultiplePosts,
   filterPosts,
   updatePost,
+  updateLike,
   deletePost,
   deleteBookmark,
-  likePost,
 };

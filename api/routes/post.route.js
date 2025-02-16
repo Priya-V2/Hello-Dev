@@ -6,9 +6,9 @@ import {
   getMultiplePosts,
   filterPosts,
   updatePost,
+  updateLike,
   deletePost,
   deleteBookmark,
-  likePost,
 } from "../controllers/post.controller.js";
 const router = express.Router();
 
@@ -17,8 +17,8 @@ router.get("/get-posts", getPosts);
 router.get("/get-multiple-posts/:userId", getMultiplePosts);
 router.get("/filter-posts", filterPosts);
 router.put("/update-post/:postId/:userId", verifyToken, updatePost);
+router.put("/update-like/:postId/:userId", verifyToken, updateLike);
 router.delete("/delete-post/:postId/:userId", verifyToken, deletePost);
 router.delete("/delete-bookmark/:postId/:userId", verifyToken, deleteBookmark);
-router.put("/like-post/:postId/:userId", verifyToken, likePost);
 
 export default router;
