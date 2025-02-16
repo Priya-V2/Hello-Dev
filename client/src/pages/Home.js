@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PostCard from "../Component/PostCard";
 import {
@@ -13,6 +13,7 @@ import { FiFilter } from "react-icons/fi";
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -90,8 +91,9 @@ export default function Home() {
           <button
             type="button"
             className="uppercase bg-neon-green border border-neon-green px-4 py-2 rounded hover:shadow-custom-indigo"
+            onClick={() => navigate("/sign-up")}
           >
-            Start Learning
+            Sign up
           </button>
 
           <div className="w-px h-8 bg-midnight-indigo"></div>
@@ -99,6 +101,7 @@ export default function Home() {
           <button
             type="button"
             className="uppercase border border-midnight-indigo px-4 py-2 rounded hover:shadow-custom-indigo"
+            onClick={() => navigate("/topics")}
           >
             browse topics
           </button>
