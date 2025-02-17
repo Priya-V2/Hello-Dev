@@ -291,7 +291,7 @@ const checkSignupOtp = async (req, res, next) => {
         .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "development",
+          secure: process.env.NODE_ENV === "production",
           sameSite: "Strict",
         })
         .json({ message: "OTP verified successfully" });
@@ -323,7 +323,7 @@ const checkOtp = async (req, res, next) => {
         .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "development",
+          secure: process.env.NODE_ENV === "production",
           sameSite: "Strict",
         })
         .json({ message: "OTP verified successfully" });
