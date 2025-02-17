@@ -5,43 +5,42 @@ import nodemailer from "nodemailer";
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 import dotenv from "dotenv";
+import TempUser from "../models/temp.user.model.js";
 
 dotenv.config();
 
 const signup = async (req, res, next) => {
-  const { username, email, password } = req.body;
-
-  if (
-    !username ||
-    !email ||
-    !password ||
-    username === "" ||
-    email === "" ||
-    password === ""
-  ) {
-    next(errorHandler(400, "All fields are required"));
-  }
-
-  const existingEmail = await User.findOne({ email });
-  if (existingEmail) {
-    return next(errorHandler(409, "Existing email"));
-  }
-
-  const randomSuffix = Math.random().toString(36).substring(2, 5);
-  const finalUserName = username + randomSuffix;
-
-  const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({
-    username: finalUserName,
-    email,
-    password: hashedPassword,
-  });
-
   try {
+    const { username, email, password } = req.body;
+
+    if (!email || email === "") {
+      return next(errorHandler(400, "All fields are required"));
+    }
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return next(errorHandler(409, "Existing email"));
+    }
+
+    if (!username || !password || username === "" || password === "") {
+      return next(errorHandler(400, "All fields are required"));
+    }
+
+    const randomSuffix = Math.random().toString(36).substring(2, 5);
+    const finalUserName = username + randomSuffix;
+
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+
+    const newUser = new User({
+      username: finalUserName,
+      email,
+      password: hashedPassword,
+    });
+
     await newUser.save();
+
     res.json("New user created sucessfully");
   } catch (error) {
-    // res.status(500).json({ message: error.message });
     next(error);
   }
 };
@@ -149,7 +148,7 @@ const checkAuth = (req, res) => {
   }
 };
 
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res, next) => {
   const { emailId } = req.body;
   const otpCreatedAt = new Date();
 
@@ -196,7 +195,7 @@ const forgotPassword = async (req, res) => {
             If you are unable to change the password within 10 minutes of OTP generation, please click on "Forgot password?" and continue with the same process again.
           </p>
           <p>Regards,</p>
-          <p>Hello Dev!</p>
+          <p>Hello Dev Team</p>
         </div>
     `,
     };
@@ -204,8 +203,101 @@ const forgotPassword = async (req, res) => {
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: "Email sent successfully" });
   } catch (error) {
-    console.error("Error sending email:", error);
-    res.status(500).json({ message: "Failed to send email" });
+    next(error);
+  }
+};
+
+const authEmail = async (req, res, next) => {
+  const { emailId } = req.body;
+  const user = await User.findOne({ email: emailId });
+
+  if (user) {
+    return next(errorHandler(409, "Existing email"));
+  }
+
+  try {
+    const otpCreatedAt = new Date();
+
+    const otp = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+
+    const newTempUser = new TempUser({
+      email: emailId,
+      otp,
+      otpCreatedAt,
+    });
+    await newTempUser.save();
+
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      logger: true,
+      debug: true,
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: emailId,
+      subject: "Verify your email-id",
+      html: `
+    <div style="font-family: Roboto, sans-serif; font-size: 16px; color: #000000; max-width: 768px; margin: 48px auto 0; min-height: 100vh;">
+          <img src="https://drive.google.com/uc?id=1DH3BNkiQ2U9pbdOpi_hQNZ1btUJu03wy" alt="Hello Dev logo" style="width: 12rem; margin-bottom: 32px; display: block; margin-left: auto; margin-right: auto;" />
+          <p style="margin-bottom: 24px;">
+            Please use the below One Time Password (OTP) to verify your email-id. This will be valid for 10 minutes only.
+          </p>
+          <p style="margin-bottom: 24px;">
+            Your OTP to verify email-id is: 
+            <span style="font-weight: bold;">
+              ${otp}
+            </span>
+          </p>
+          <p style="margin-bottom: 24px;">
+            If you are unable to signup within 10 minutes of OTP generation, please go to sign-up page and continue with the same process again.
+          </p>
+          <p>Regards,</p>
+          <p>Hello Dev Team</p>
+        </div>
+    `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: "Email sent successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const checkSignupOtp = async (req, res, next) => {
+  const { emailId, otp } = req.body;
+  try {
+    const tempUser = await TempUser.findOne({ email: emailId });
+
+    if (!tempUser) {
+      next(errorHandler(400, "User not found"));
+    }
+
+    if (tempUser.otp !== otp) {
+      next(errorHandler(400, "Invalid OTP"));
+    }
+
+    const token = jwt.sign({ id: tempUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "10m",
+    });
+
+    if (otp === tempUser.otp) {
+      res
+        .status(200)
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "development",
+          sameSite: "Strict",
+        })
+        .json({ message: "OTP verified successfully" });
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -231,7 +323,7 @@ const checkOtp = async (req, res, next) => {
         .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: process.env.NODE_ENV === "development",
           sameSite: "Strict",
         })
         .json({ message: "OTP verified successfully" });
@@ -289,8 +381,10 @@ export {
   signin,
   googleLogin,
   googleCallback,
+  authEmail,
   checkAuth,
   forgotPassword,
   resetPassword,
+  checkSignupOtp,
   checkOtp,
 };
