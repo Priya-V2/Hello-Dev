@@ -6,6 +6,8 @@ export default function Signup() {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState("EMAIL INPUT");
+  const [otp, setOtp] = useState("");
   const ctaColor = loading ? "bg-neon-green-tint" : "bg-neon-green";
   const navigate = useNavigate();
 
@@ -15,30 +17,92 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.username || !formData.email || !formData.password) {
-      setErrorMessage("Please fill out all the fields");
+
+    if (form === "EMAIL INPUT") {
+      if (!formData.email) {
+        return setErrorMessage("Please fill out all the fields");
+      }
+
+      try {
+        setLoading(true);
+        setErrorMessage(null);
+
+        const res = await fetch("/api/auth/auth-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ emailId: formData.email }),
+        });
+        const data = await res.json();
+        console.log(data);
+
+        if (res.ok) {
+          setLoading(false);
+          return setForm("OTP VERIFICATION");
+        } else {
+          setLoading(false);
+          return setErrorMessage(data.message);
+        }
+      } catch (error) {
+        setLoading(false);
+        return setErrorMessage(error.message);
+      }
     }
-    try {
-      setLoading(true);
-      setErrorMessage(null);
-      const res = await fetch("api/auth/sign-up", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      console.log(data);
-      if (data.success === false) {
-        setErrorMessage(data.message);
+    if (form === "OTP VERIFICATION") {
+      if (!otp) {
+        return setErrorMessage("Please fill  all the fields");
       }
-      setLoading(false);
-      if (res.ok) {
-        return navigate("/sign-in");
+
+      try {
+        setLoading(true);
+        setErrorMessage(null);
+
+        const res = await fetch("/api/auth/check-signup-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ emailId: formData.email, otp }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          setLoading(false);
+          return setForm("USER DETAILS");
+        } else {
+          setLoading(false);
+          return setErrorMessage(data.message);
+        }
+      } catch (error) {
+        setLoading(false);
+        return setErrorMessage(error.message);
       }
-    } catch (error) {
-      console.error("Error during submission:", error.errorMessage);
-      setErrorMessage(error.message);
-      setLoading(false);
+    }
+
+    if (form === "USER DETAILS") {
+      if (!formData.username || !formData.password) {
+        return setErrorMessage("Please fill out all the fields");
+      }
+
+      try {
+        setLoading(true);
+        setErrorMessage(null);
+        const res = await fetch("api/auth/sign-up", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+
+        if (data.success === false) {
+          return setErrorMessage(data.message);
+        }
+        setLoading(false);
+
+        if (res.ok) {
+          return navigate("/sign-in");
+        }
+      } catch (error) {
+        setLoading(false);
+        return setErrorMessage(error.message);
+      }
     }
   };
 
@@ -53,51 +117,100 @@ export default function Signup() {
               className="w-48 lg:w-56"
             />
           </Link>
+
           <p className="text-sm tracking-widest font-bold self-center mb-4">
             A Developer Guide for beginners
           </p>
+
           {errorMessage && (
             <div className="text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
               <span>{errorMessage}</span>
             </div>
           )}
+
           <form onSubmit={handleSubmit}>
-            <label htmlFor="username">Username:</label>
-            <br />
-            <input
-              type="text"
-              id="username"
-              name="username"
-              placeholder="Your Name"
-              className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
-              onChange={handleChange}
-            />
-            <br />
-            <label htmlFor="email">Email:</label>
-            <br />
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="example@gmail.com"
-              className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
-              onChange={handleChange}
-            />
-            <br />
-            <label htmlFor="password">Password:</label>
-            <br />
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Your Password"
-              className="w-full p-2 mt-1 mb-6 border-2 rounded focus:outline-none focus:border-cool-blue"
-              onChange={handleChange}
-            />
-            <br />
+            {form === "EMAIL INPUT" && (
+              <>
+                <label htmlFor="email">Email:</label>
+                <br />
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="example@gmail.com"
+                  className="w-full p-2 mt-1 mb-4 border-2 rounded focus:outline-none focus:border-cool-blue"
+                  onChange={handleChange}
+                />
+                <br />
+                <p className="mb-2">You'll receive an email with the OTP</p>
+              </>
+            )}
+
+            {form !== "EMAIL INPUT" && (
+              <>
+                <label htmlFor="email">Email:</label>
+                <br />
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="example@gmail.com"
+                  className="w-full p-2 mt-1 mb-4 border-2 rounded focus:outline-none focus:border-cool-blue"
+                  value={formData.email}
+                  disabled
+                />
+                <br />
+              </>
+            )}
+
+            {form === "OTP VERIFICATION" && (
+              <>
+                <label htmlFor="otp">OTP:</label>
+                <br />
+                <input
+                  type="text"
+                  name="otp"
+                  id="otp"
+                  placeholder="Your OTP please"
+                  required
+                  className="w-full p-2 mt-1 mb-6 border-2 rounded focus:outline-none focus:border-cool-blue"
+                  onChange={(e) => setOtp(e.target.value)}
+                />
+                <p className="mb-4">Please enter the received OTP above</p>
+              </>
+            )}
+
+            {form === "USER DETAILS" && (
+              <>
+                <label htmlFor="username">Username:</label>
+                <br />
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  placeholder="Your Name"
+                  className="w-full p-2 mt-1 mb-2 border-2 rounded focus:outline-none focus:border-cool-blue"
+                  onChange={handleChange}
+                />
+                <br />
+
+                <label htmlFor="password">Password:</label>
+                <br />
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Your Password"
+                  className="w-full p-2 mt-1 mb-6 border-2 rounded focus:outline-none focus:border-cool-blue"
+                  onChange={handleChange}
+                />
+                <br />
+              </>
+            )}
+
             <button
               type="submit"
-              className={`font-medium text-midnight-indigo ${ctaColor} w-full p-1.5 mb-4 border border-midnight-indigo hover:shadow-custom-indigo  rounded`}
+              className={`font-medium text-midnight-indigo ${ctaColor} w-full p-1.5 mb-3 border border-midnight-indigo hover:shadow-custom-indigo  rounded`}
               disabled={loading}
             >
               {loading ? (
@@ -109,10 +222,13 @@ export default function Signup() {
                   ></svg>
                   <span className="ml-2">Loading...</span>
                 </div>
+              ) : form === "USER DETAILS" ? (
+                "Sign up"
               ) : (
-                "Sign Up"
+                "Continue"
               )}
             </button>
+
             <Oauth />
             <div className="flex gap-1">
               <span>Already have an account?</span>
