@@ -14,7 +14,7 @@ export default function DashBookmark() {
     const fetchUser = async () => {
       try {
         const res = await fetch(
-          `/api/post/get-multiple-posts/${currentUser._id}`,
+          `/api/post/get-multiple-posts/bookmark/${currentUser._id}`,
           {
             method: "GET",
           }
