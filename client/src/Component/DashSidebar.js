@@ -6,7 +6,7 @@ import { FaUser, FaRegFileAlt, FaUsers } from "react-icons/fa";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { LiaCommentsSolid } from "react-icons/lia";
 import { BiSolidDashboard } from "react-icons/bi";
-import { FaRegBookmark } from "react-icons/fa6";
+import { FaRegBookmark, FaThumbsUp } from "react-icons/fa6";
 
 export default function DashSidebar() {
   const dispatch = useDispatch();
@@ -77,6 +77,17 @@ export default function DashSidebar() {
           >
             <FaRegBookmark className="w-4 h-4 ml-2" />
             <span className="text-base font-medium">Bookmark</span>
+          </div>
+        </Link>
+
+        <Link to={"/dashboard?tab=liked-posts"}>
+          <div
+            className={`flex items-center gap-3 text-white rounded p-1.5 mb-1 cursor-pointer hover:bg-midnight-indigo-tint ${
+              tab === "liked-posts" && "bg-midnight-indigo-tint"
+            }`}
+          >
+            <FaThumbsUp className="w-4 h-4 ml-2" />
+            <span className="text-base font-medium">Liked Posts</span>
           </div>
         </Link>
 
