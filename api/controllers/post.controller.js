@@ -115,7 +115,7 @@ const getPosts = async (req, res, next) => {
 };
 
 const getMultiplePosts = async (req, res, next) => {
-  const { userId } = req.params;
+  const { type, userId } = req.params;
 
   try {
     const user = await User.findById(userId);
@@ -124,15 +124,29 @@ const getMultiplePosts = async (req, res, next) => {
       return next(errorHandler(404, "User not found"));
     }
 
-    const postIdArr = user.bookmarks;
+    if (type === "bookmark") {
+      const postIdArr = user.bookmarks;
 
-    if (!postIdArr) {
-      return next(errorHandler(400, "No postId is provided"));
+      if (!postIdArr) {
+        return next(errorHandler(400, "No postId is provided"));
+      }
+
+      const posts = await Post.find({ _id: { $in: postIdArr } });
+
+      return res.status(200).json(posts);
     }
 
-    const posts = await Post.find({ _id: { $in: postIdArr } });
+    if (type === "like") {
+      const postIdArr = user.likes;
 
-    res.status(200).json(posts);
+      if (!postIdArr) {
+        return next(errorHandler(400, "No postId is provided"));
+      }
+
+      const posts = await Post.find({ _id: { $in: postIdArr } });
+
+      return res.status(200).json(posts);
+    }
   } catch (error) {
     next(error);
   }

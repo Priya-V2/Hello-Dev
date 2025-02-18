@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.post("/create", verifyToken, create);
 router.get("/get-posts", getPosts);
-router.get("/get-multiple-posts/:userId", getMultiplePosts);
+router.get("/get-multiple-posts/:type/:userId", getMultiplePosts);
 router.get("/filter-posts", filterPosts);
 router.put("/update-post/:postId/:userId", verifyToken, updatePost);
 router.put("/update-like/:postId/:userId", verifyToken, updateLike);
