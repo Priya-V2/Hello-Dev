@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const [emailId, setEmailId] = useState("");
+  const [errorMessage, setErrorMessage] = useState(false);
   const [otp, setOtp] = useState("");
   const [otpField, setOtpField] = useState(false);
   const ctaColor = loading ? "bg-neon-green-tint" : "bg-neon-green";
@@ -18,16 +19,17 @@ export default function ForgotPassword() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ emailId }),
       });
+      const data = await res.json();
 
       if (res.ok) {
         setLoading(false);
-        setOtpField(true);
+        return setOtpField(true);
       } else {
-        alert("Failed to send email.");
+        return setErrorMessage(data.message);
       }
     } catch (error) {
       setLoading(false);
-      console.error("Error:", error);
+      return setErrorMessage(error.message);
     }
   };
 
@@ -41,18 +43,18 @@ export default function ForgotPassword() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ emailId, otp }),
       });
+      const data = await res.json();
 
       if (res.ok) {
         setLoading(false);
-        navigate("/reset-password");
+        return navigate("/reset-password");
       } else {
         setLoading(false);
-        alert("Failed to match the OTP");
+        return setErrorMessage(data.message);
       }
     } catch (error) {
       setLoading(false);
-      console.error("Error:", error);
-      alert(error);
+      return setErrorMessage(error);
     }
   };
 
@@ -64,6 +66,11 @@ export default function ForgotPassword() {
           alt="Hello dev logo"
           className="w-48 lg:w-56 mb-6 mx-auto"
         />
+        {errorMessage && (
+          <div className="text-red-700 bg-red-100 mb-2 p-2 rounded-sm font-medium text-center">
+            <span>{errorMessage}</span>
+          </div>
+        )}
         {otpField ? (
           <form onSubmit={handleOTPCheck}>
             <label htmlFor="email">Email:</label>
