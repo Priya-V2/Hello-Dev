@@ -69,74 +69,80 @@ export default function DashPosts() {
   };
 
   return (
-    <div className="table-auto font-roboto text-base text-dark-charcoal overflow-x-scroll mx-auto mt-4 p-3 scrollbar">
+    <div className="table-auto font-roboto text-sm md:text-base text-dark-charcoal overflow-auto mt-4 xl:mx-auto p-3">
       {currentUser.isAdmin && posts.length > 0 ? (
-        <table className="shadow-custom-indigo rounded">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 font-medium bg-gray-100 rounded-tl">
-                Date Updated
-              </th>
-              <th className="px-6 py-3 font-medium bg-gray-100">Post Image</th>
-              <th className="px-6 py-3 font-medium bg-gray-100">Post Title</th>
-              <th className="px-6 py-3 font-medium bg-gray-100">Category</th>
-              <th className="px-6 py-3 font-medium bg-gray-100">Views</th>
-              <th className="px-6 py-3 font-medium bg-gray-100">Delete</th>
-              <th className="px-6 py-3 font-medium bg-gray-100 rounded-tr">
-                Edit
-              </th>
-            </tr>
-          </thead>
-          <tbody className="">
-            {posts.map((post, key) => {
-              return (
-                <tr
-                  key={key}
-                  className="odd:bg-white even:bg-gray-100 hover:bg-gray-200 "
-                >
-                  <td className="px-6 py-3 last:rounded-b-3xl">
-                    {new Date(post.updatedAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-3">
-                    <Link to={`/post/${post.slug}`}>
-                      <img
-                        src={post.image}
-                        alt={post.title || "Post Image"}
-                        className="w-20 h-10 object-cover bg-gray-500 hover:cursor-pointer"
-                      />
-                    </Link>
-                  </td>
-                  <td className="font-medium min-w-96 px-6 py-3 hover:cursor-pointer">
-                    <Link to={`/post/${post.slug}`}>{post.title}</Link>
-                  </td>
-                  <td className="font-normal text-neutral-500 px-6 py-3">
-                    {post.category}
-                  </td>
-                  <td className="font-medium px-6 py-3">{post.views}</td>
-                  <td className="px-6 py-3">
-                    <span
-                      onClick={() => {
-                        setShowModal(true);
-                        setPostIdToDelete(post._id);
-                      }}
-                      className="text-red-700 hover:underline hover:cursor-pointer"
-                    >
-                      Delete
-                    </span>
-                  </td>
-                  <td className="px-6 py-3">
-                    <Link
-                      className="text-blue-700 hover:underline hover:pointer"
-                      to={`/update-post/${post._id}`}
-                    >
-                      <span>Edit</span>
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="overflow-auto shadow-custom-indigo rounded">
+          <table className="w-[640px] xl:w-full">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 font-medium bg-gray-100 rounded-tl">
+                  Date Updated
+                </th>
+                <th className="px-6 py-3 font-medium bg-gray-100">
+                  Post Image
+                </th>
+                <th className="px-6 py-3 font-medium bg-gray-100">
+                  Post Title
+                </th>
+                <th className="px-6 py-3 font-medium bg-gray-100">Category</th>
+                <th className="px-6 py-3 font-medium bg-gray-100">Views</th>
+                <th className="px-6 py-3 font-medium bg-gray-100">Delete</th>
+                <th className="px-6 py-3 font-medium bg-gray-100 rounded-tr">
+                  Edit
+                </th>
+              </tr>
+            </thead>
+            <tbody className="">
+              {posts.map((post, key) => {
+                return (
+                  <tr
+                    key={key}
+                    className="odd:bg-white even:bg-gray-100 hover:bg-gray-200 "
+                  >
+                    <td className="px-6 py-3 last:rounded-b-3xl">
+                      {new Date(post.updatedAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-3">
+                      <Link to={`/post/${post.slug}`}>
+                        <img
+                          src={post.image}
+                          alt={post.title || "Post Image"}
+                          className="w-20 h-10 object-cover bg-gray-500 hover:cursor-pointer"
+                        />
+                      </Link>
+                    </td>
+                    <td className="font-medium min-w-96 px-6 py-3 hover:cursor-pointer">
+                      <Link to={`/post/${post.slug}`}>{post.title}</Link>
+                    </td>
+                    <td className="font-normal text-neutral-500 px-6 py-3">
+                      {post.category}
+                    </td>
+                    <td className="font-medium px-6 py-3">{post.views}</td>
+                    <td className="px-6 py-3">
+                      <span
+                        onClick={() => {
+                          setShowModal(true);
+                          setPostIdToDelete(post._id);
+                        }}
+                        className="text-red-700 hover:underline hover:cursor-pointer"
+                      >
+                        Delete
+                      </span>
+                    </td>
+                    <td className="px-6 py-3">
+                      <Link
+                        className="text-blue-700 hover:underline hover:pointer"
+                        to={`/update-post/${post._id}`}
+                      >
+                        <span>Edit</span>
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <p>You have no posts Yet!</p>
       )}

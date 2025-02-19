@@ -55,14 +55,14 @@ export default function DashBookmark() {
   };
 
   return (
-    <div className="min-h-screen mx-auto">
+    <div className="table-auto min-h-screen xl:mx-auto overflow-auto px-4">
       {error && (
         <div className="text-red-700 bg-red-100 my-8 p-2 rounded-sm font-medium text-center">
           <span>{error}</span>
         </div>
       )}
-      <div className="my-12">
-        <table className="shadow-custom-indigo rounded">
+      <div className="overflow-auto shadow-custom-indigo rounded my-12">
+        <table className="w-[640px] xl:w-full">
           <thead>
             <tr>
               <th className="px-6 py-3 font-medium bg-gray-100 rounded-tl">

@@ -41,7 +41,7 @@ export default function DashSidebar() {
   };
   return (
     <div>
-      <div className="font-roboto w-full md:w-56 text-dark-charcoal bg-midnight-indigo min-h-max md:min-h-screen border-b-2 p-4 md:p-2 md:pt-3">
+      <div className="font-roboto w-full md:w-48 lg:w-56 text-dark-charcoal bg-midnight-indigo min-h-max md:min-h-screen border-b-2 p-4 md:p-2 md:pt-3">
         {currentUser.isAdmin && (
           <Link to={"/dashboard?tab=dashboard"}>
             <div
@@ -50,7 +50,9 @@ export default function DashSidebar() {
               }`}
             >
               <BiSolidDashboard className="w-5 h-5 ml-2" />
-              <span className="text-base font-medium">Dashboard</span>
+              <span className="text-sm lg:text-base font-medium">
+                Dashboard
+              </span>
             </div>
           </Link>
         )}
@@ -62,8 +64,8 @@ export default function DashSidebar() {
             }`}
           >
             <FaUser className="w-4 h-4 ml-2" />
-            <span className="text-base font-medium">Profile</span>
-            <span className="text-xs ml-auto text-white bg-dark-charcoal px-3 py-1 rounded">
+            <span className="text-sm lg:text-base font-medium">Profile</span>
+            <span className="font-bold text-xs tracking-wide ml-auto text-dark-charcoal bg-neon-green px-3 py-1 rounded">
               {currentUser.isAdmin ? "Admin" : "User"}
             </span>
           </div>
@@ -76,7 +78,7 @@ export default function DashSidebar() {
             }`}
           >
             <FaRegBookmark className="w-4 h-4 ml-2" />
-            <span className="text-base font-medium">Bookmark</span>
+            <span className="text-sm lg:text-base font-medium">Bookmark</span>
           </div>
         </Link>
 
@@ -87,7 +89,9 @@ export default function DashSidebar() {
             }`}
           >
             <FaThumbsUp className="w-4 h-4 ml-2" />
-            <span className="text-base font-medium">Liked Posts</span>
+            <span className="text-sm lg:text-base font-medium">
+              Liked Posts
+            </span>
           </div>
         </Link>
 
@@ -100,7 +104,7 @@ export default function DashSidebar() {
                 }`}
               >
                 <FaRegFileAlt className="w-5 h-5 ml-1" />
-                <span className="text-base font-medium">Posts</span>
+                <span className="text-sm lg:text-base font-medium">Posts</span>
               </div>
             </Link>
 
@@ -111,7 +115,7 @@ export default function DashSidebar() {
                 }`}
               >
                 <FaUsers className="w-5 h-5 ml-1" />
-                <span className="text-base font-medium">Users</span>
+                <span className="text-sm lg:text-base font-medium">Users</span>
               </div>
             </Link>
 
@@ -122,7 +126,9 @@ export default function DashSidebar() {
                 }`}
               >
                 <LiaCommentsSolid className="w-5 h-5 ml-1" />
-                <span className="text-base font-medium">Comments</span>
+                <span className="text-sm lg:text-base font-medium">
+                  Comments
+                </span>
               </div>
             </Link>
           </>
@@ -134,7 +140,10 @@ export default function DashSidebar() {
           }`}
         >
           <RiLogoutBoxRLine className="w-5 h-5 ml-1" />
-          <span className="text-base font-medium" onClick={handleSignout}>
+          <span
+            className="text-sm lg:text-base font-medium"
+            onClick={handleSignout}
+          >
             Sign out
           </span>
         </div>

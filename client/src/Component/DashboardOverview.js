@@ -187,19 +187,23 @@ export default function DashboardOverview() {
           </div>
         </div>
       </div>
+
       <div className="grid grid-cols-2 justify-between px-4 py-1 mb-4 border-b">
         <h3 className="self-end font-medium">Recent Posts</h3>
         <button className="justify-self-end text-sm hover:underline hover:cursor-pointer">
           <Link to={"/dashboard?tab=posts"}>See All</Link>
         </button>
       </div>
+
       <PostsDisplay posts={posts} />
+
       <div className="grid grid-cols-2 justify-between px-4 py-1 mt-12 mb-4 border-b">
         <h3 className="self-end font-medium">Popular Posts</h3>
         <button className="justify-self-end text-sm hover:underline hover:cursor-pointer">
           <Link to={"/dashboard?tab=posts"}>See All</Link>
         </button>
       </div>
+
       <PostsDisplay posts={popularPosts} />
     </div>
   );

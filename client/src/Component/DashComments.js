@@ -77,59 +77,61 @@ export default function DashComments() {
   };
 
   return (
-    <div className="table-auto font-roboto text-base text-dark-charcoal overflow-x-scroll md:mx-auto mt-4 p-3 scrollbar scrollbar-track-neutral-100 scrollbar-thumb-neutral-300 hover:scrollbar-thumb-neutral-500">
+    <div className="table-auto font-roboto text-base text-dark-charcoal overflow-x-scroll xl:mx-auto mt-4 p-3 overflow-auto">
       {currentUser.isAdmin && comments.length > 0 ? (
-        <table className="shadow-custom-indigo rounded">
-          <thead>
-            <tr>
-              <th className="px-4 py-3 font-medium bg-gray-100 rounded-tl">
-                Date Updated
-              </th>
-              <th className="px-4 py-3 font-medium bg-gray-100">
-                Comment Content
-              </th>
-              <th className="px-4 py-3 font-medium bg-gray-100">
-                No. of Likes
-              </th>
-              <th className="px-4 py-3 font-medium bg-gray-100">Post ID</th>
-              <th className="px-4 py-3 font-medium bg-gray-100">User ID</th>
-              <th className="px-4 py-3 font-medium bg-gray-100 rounded-tr">
-                Delete
-              </th>
-            </tr>
-          </thead>
-          <tbody className="">
-            {comments.map((comment, key) => {
-              return (
-                <tr
-                  key={key}
-                  className="odd:bg-white even:bg-gray-100 hover:bg-gray-200 "
-                >
-                  <td className="px-4 py-3 last:rounded-b-3xl">
-                    {new Date(comment.updatedAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-3">{comment.content}</td>
-                  <td className="text-center px-4 py-3">
-                    {comment.numberOfLikes}
-                  </td>
-                  <td className="px-4 py-3">{comment.postId}</td>
-                  <td className="px-4 py-3">{comment.userId}</td>
-                  <td className="px-4 py-3">
-                    <span
-                      onClick={() => {
-                        setShowModal(true);
-                        setCommentIdToDelete(comment._id);
-                      }}
-                      className="text-red-700 hover:underline hover:cursor-pointer"
-                    >
-                      Delete
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="overflow-auto shadow-custom-indigo rounded">
+          <table className="w-[640px] xl:w-full">
+            <thead>
+              <tr>
+                <th className="px-4 py-3 font-medium bg-gray-100 rounded-tl">
+                  Date Updated
+                </th>
+                <th className="px-4 py-3 font-medium bg-gray-100">
+                  Comment Content
+                </th>
+                <th className="px-4 py-3 font-medium bg-gray-100">
+                  No. of Likes
+                </th>
+                <th className="px-4 py-3 font-medium bg-gray-100">Post ID</th>
+                <th className="px-4 py-3 font-medium bg-gray-100">User ID</th>
+                <th className="px-4 py-3 font-medium bg-gray-100 rounded-tr">
+                  Delete
+                </th>
+              </tr>
+            </thead>
+            <tbody className="">
+              {comments.map((comment, key) => {
+                return (
+                  <tr
+                    key={key}
+                    className="odd:bg-white even:bg-gray-100 hover:bg-gray-200 "
+                  >
+                    <td className="px-4 py-3 last:rounded-b-3xl">
+                      {new Date(comment.updatedAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-3">{comment.content}</td>
+                    <td className="text-center px-4 py-3">
+                      {comment.numberOfLikes}
+                    </td>
+                    <td className="px-4 py-3">{comment.postId}</td>
+                    <td className="px-4 py-3">{comment.userId}</td>
+                    <td className="px-4 py-3">
+                      <span
+                        onClick={() => {
+                          setShowModal(true);
+                          setCommentIdToDelete(comment._id);
+                        }}
+                        className="text-red-700 hover:underline hover:cursor-pointer"
+                      >
+                        Delete
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <p>You have no comments Yet!</p>
       )}

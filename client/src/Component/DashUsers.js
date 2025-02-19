@@ -69,73 +69,77 @@ export default function DashUsers() {
   };
 
   return (
-    <div className="table-auto font-roboto text-base text-dark-charcoal overflow-x-scroll md:mx-auto mt-4 p-3 scrollbar scrollbar-track-neutral-100 scrollbar-thumb-neutral-300 hover:scrollbar-thumb-neutral-500">
+    <div className="table-auto font-roboto text-base text-dark-charcoal overflow-x-scroll md:mx-auto mt-4 p-3 overflow-auto">
       {currentUser.isAdmin && users.length > 0 ? (
-        <table className="shadow-custom-indigo rounded">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 font-medium bg-gray-100 rounded-tl">
-                Date create
-              </th>
-              <th className="px-6 py-3 font-medium bg-gray-100">User image</th>
-              <th className="px-6 py-3 font-medium bg-gray-100">User name</th>
-              <th className="px-6 py-3 font-medium bg-gray-100">Email</th>
-              <th className="px-6 py-3 font-medium bg-gray-100">Admin</th>
-              <th className="px-6 py-3 font-medium bg-gray-100 rounded-tr">
-                Delete
-              </th>
-            </tr>
-          </thead>
-          <tbody className="">
-            {users.map((user, key) => {
-              return (
-                <tr
-                  key={key}
-                  className="odd:bg-white even:bg-gray-100 hover:bg-gray-200 "
-                >
-                  <td className="px-6 py-3 last:rounded-b-3xl">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-11 py-3">
-                    {user.profilePicture ? (
-                      <img
-                        src={user.profilePicture}
-                        alt="user profile"
-                        className="w-10 h-10 object-cover bg-gray-500 rounded-full hover:cursor-pointer"
-                      />
-                    ) : (
-                      <FaCircleUser className="w-10 h-10 object-cover text-center rounded-full" />
-                    )}
-                  </td>
-                  <td className="font-medium px-6 py-3 hover:cursor-pointer">
-                    {user.username}
-                  </td>
-                  <td className="font-normal text-neutral-500 px-6 py-3">
-                    {user.email}
-                  </td>
-                  <td className="px-10 py-4">
-                    {user.isAdmin ? (
-                      <FaCheck className="text-green-500 w-6 h-6" />
-                    ) : (
-                      <FaXmark className="text-red-500 w-6 h-6" />
-                    )}
-                  </td>
-                  <td className="px-6 py-3">
-                    <span
-                      onClick={() => {
-                        setShowModal(true);
-                        setUserIdToDelete(user._id);
-                      }}
-                      className="text-red-700 hover:underline hover:cursor-pointer"
-                    >
-                      Delete
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="overflow-auto shadow-custom-indigo rounded">
+          <table className="w-[640px] xl:w-full">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 font-medium bg-gray-100 rounded-tl">
+                  Date create
+                </th>
+                <th className="px-6 py-3 font-medium bg-gray-100">
+                  User image
+                </th>
+                <th className="px-6 py-3 font-medium bg-gray-100">User name</th>
+                <th className="px-6 py-3 font-medium bg-gray-100">Email</th>
+                <th className="px-6 py-3 font-medium bg-gray-100">Admin</th>
+                <th className="px-6 py-3 font-medium bg-gray-100 rounded-tr">
+                  Delete
+                </th>
+              </tr>
+            </thead>
+            <tbody className="">
+              {users.map((user, key) => {
+                return (
+                  <tr
+                    key={key}
+                    className="odd:bg-white even:bg-gray-100 hover:bg-gray-200 "
+                  >
+                    <td className="px-6 py-3 last:rounded-b-3xl">
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-11 py-3">
+                      {user.profilePicture ? (
+                        <img
+                          src={user.profilePicture}
+                          alt="user profile"
+                          className="w-10 h-10 object-cover bg-gray-500 rounded-full hover:cursor-pointer"
+                        />
+                      ) : (
+                        <FaCircleUser className="w-10 h-10 object-cover text-center rounded-full" />
+                      )}
+                    </td>
+                    <td className="font-medium px-6 py-3 hover:cursor-pointer">
+                      {user.username}
+                    </td>
+                    <td className="font-normal text-neutral-500 px-6 py-3">
+                      {user.email}
+                    </td>
+                    <td className="px-10 py-4">
+                      {user.isAdmin ? (
+                        <FaCheck className="text-green-500 w-6 h-6" />
+                      ) : (
+                        <FaXmark className="text-red-500 w-6 h-6" />
+                      )}
+                    </td>
+                    <td className="px-6 py-3">
+                      <span
+                        onClick={() => {
+                          setShowModal(true);
+                          setUserIdToDelete(user._id);
+                        }}
+                        className="text-red-700 hover:underline hover:cursor-pointer"
+                      >
+                        Delete
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <p>You have no users Yet!</p>
       )}

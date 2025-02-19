@@ -22,7 +22,7 @@ export default function Dashboard() {
   }, [location.search]);
 
   return (
-    <div className="flex flex-col md:flex-row ">
+    <div className="flex flex-col md:flex-row md:h-screen">
       <div>
         <DashSidebar />
       </div>
