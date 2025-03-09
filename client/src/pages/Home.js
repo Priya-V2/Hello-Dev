@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import PostCard from "../Component/PostCard";
 import {
   FaArrowUp,
@@ -11,6 +12,7 @@ import {
 import { FiFilter } from "react-icons/fi";
 
 export default function Home() {
+  const { currentUser } = useSelector((state) => state.user);
   const [posts, setPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const navigate = useNavigate();
@@ -45,6 +47,10 @@ export default function Home() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleScrollDown = () => {
+    window.scrollTo(0, 430);
   };
 
   const socialMedium = [
@@ -88,13 +94,23 @@ export default function Home() {
         </p>
 
         <div className="flex gap-2 sm:gap-6 justify-center items-center font-semibold text-xs lg:text-sm xl:text-base text-midnight-indigo tracking-widest my-4">
-          <button
-            type="button"
-            className="uppercase bg-neon-green border border-neon-green px-4 py-2 rounded hover:shadow-custom-indigo"
-            onClick={() => navigate("/sign-up")}
-          >
-            Sign up
-          </button>
+          {currentUser ? (
+            <button
+              type="button"
+              className="uppercase bg-neon-green border border-neon-green px-4 py-2 rounded hover:shadow-custom-indigo"
+              onClick={() => handleScrollDown()}
+            >
+              Explore Posts
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="uppercase bg-neon-green border border-neon-green px-4 py-2 rounded hover:shadow-custom-indigo"
+              onClick={() => navigate("/sign-up")}
+            >
+              Sign up
+            </button>
+          )}
 
           <div className="w-px h-8 bg-midnight-indigo"></div>
 
