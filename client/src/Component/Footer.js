@@ -51,7 +51,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="font-quicksand text-dark-charcoal text-base">
+    <footer className="font-quicksand text-dark-charcoal text-base mt-12 sm:mt-0">
       <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-12 items-center justify-items-stretch bg-alabaster border-t-2 border-midnight-indigo h-max md:h-52 p-4 sm:px-8 lg:px-16 xl:px-32">
         <div className="flex flex-col items-center md:items-start">
           <Link to="/" className="md:self-start">
@@ -120,36 +120,3 @@ export default function Footer() {
     </footer>
   );
 }
-
-/*
-
- <div className="flex gap-3 justify-center">
-          <a href="mailto:priyav2.bct@gmail.com" className="self-center">
-            <FaEnvelope className="w-5 h-5 text-white" />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/priya-v2"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="self-center"
-          >
-            <FaGithub className="w-5 h-5 text-white" />
-          </a>
-          <a
-            href="https://github.com/priya-V2"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="self-center"
-          >
-            <FaLinkedin className="w-5 h-5 text-white" />
-          </a>
-          <a
-            href="https://x.com/Priya_v2"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="self-center"
-          >
-            <FaXTwitter className="w-5 h-5 text-white" />
-          </a>
-        </div>
-        */
