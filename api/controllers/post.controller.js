@@ -53,7 +53,7 @@ const getPosts = async (req, res, next) => {
 
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 9;
+    const limit = parseInt(req.query.limit) || 8;
     const sortDirection = req.query.order === "asc" ? 1 : -1;
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
@@ -231,37 +231,6 @@ const deleteBookmark = async (req, res, next) => {
     next(error);
   }
 };
-
-// const likePost = async (req, res, next) => {
-//   try {
-//     const post = await Post.findById(req.params.postId);
-
-//     if (!post) {
-//       return next(errorHandler(404, "Post not found"));
-//     }
-//     const userId = req.user.id;
-
-//     const liked = post.likedBy.includes(userId);
-
-//     if (liked) {
-//       post.likedBy = post.likedBy.filter((id) => id !== userId);
-//       post.likes -= 1;
-//     } else {
-//       post.likedBy.push(userId);
-//       post.likes += 1;
-//     }
-
-//     await post.save();
-
-//     res.status(200).json({
-//       message: liked ? "Post unliked successfully" : "Post liked successfully",
-//       post,
-//       liked,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 const updateLike = async (req, res, next) => {
   const { postId, userId } = req.params;
