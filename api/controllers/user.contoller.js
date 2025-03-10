@@ -59,7 +59,8 @@ const getUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-  const { username, password } = req.body;
+  const { username, email, profilePicture } = await req.body;
+  // const password = req.body.password ? req.body.password : false;
 
   const existingUser = await User.findOne({ username });
 
@@ -71,13 +72,13 @@ const updateUser = async (req, res, next) => {
     return next(errorHandler(403, "You're not allowed to update the user"));
   }
 
-  if (password) {
-    if (password.length < 6) {
+  let hashedPassword;
+  if (req.body.password) {
+    if (req.body.password.length < 6) {
       return next(errorHandler(400, "Password must be atleast 6 characters"));
     }
+    hashedPassword = bcryptjs.hashSync(req.body.password, 10);
   }
-
-  const hashedPassword = bcryptjs.hashSync(password, 10);
 
   if (username) {
     if (username.length < 7 || username.length > 20) {
@@ -102,16 +103,19 @@ const updateUser = async (req, res, next) => {
   }
 
   try {
+    const updateFields = {
+      username,
+      email,
+      profilePicture,
+    };
+
+    if (req.body.password) {
+      updateFields.password = hashedPassword;
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       req.params.userId,
-      {
-        $set: {
-          username: req.body.username,
-          email: req.body.email,
-          profilePicture: req.body.profilePicture,
-          password: hashedPassword,
-        },
-      },
+      { $set: updateFields },
       { new: true }
     );
     const { password, ...rest } = updatedUser._doc;
