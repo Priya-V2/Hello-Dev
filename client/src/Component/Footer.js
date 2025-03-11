@@ -1,5 +1,5 @@
 import { FaEnvelope, FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signoutUserSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -33,6 +33,7 @@ export default function Footer() {
     },
   ];
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSignout = async () => {
     try {
@@ -44,6 +45,7 @@ export default function Footer() {
         console.log(data.message);
       } else {
         dispatch(signoutUserSuccess());
+        navigate("/sign-in");
       }
     } catch (error) {
       console.log(error);
@@ -87,7 +89,11 @@ export default function Footer() {
             </h4>
             <a href="/sign-up">Sign up</a>
             <a href="/sign-in">Sign in</a>
-            <button type="button" onClick={handleSignout} className="text-left">
+            <button
+              type="button"
+              onClick={() => handleSignout()}
+              className="text-left"
+            >
               Sign out
             </button>
           </div>
@@ -96,7 +102,7 @@ export default function Footer() {
             <h4 className="font-extrabold text-dark-charcoal uppercase tracking-wider">
               Dashboard
             </h4>
-            <a href="/">Profile</a>
+            <a href="/dashboard?tab=profile">Profile</a>
             <a href="/dashboard?tab=liked-posts">Liked Posts</a>
             <a href="/dashboard?tab=bookmark">Bookmark</a>
           </div>
@@ -107,7 +113,7 @@ export default function Footer() {
             </h4>
             <a href="/">Home</a>
             <a href="/about">About</a>
-            <a href="/topic">Topics</a>
+            <a href="/topics">Topics</a>
           </div>
         </div>
       </div>
