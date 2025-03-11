@@ -47,6 +47,7 @@ export default function Signup() {
         return setErrorMessage(error.message);
       }
     }
+
     if (form === "OTP VERIFICATION") {
       if (!otp) {
         return setErrorMessage("Please fill  all the fields");
@@ -92,11 +93,13 @@ export default function Signup() {
         const data = await res.json();
 
         if (data.success === false) {
+          setLoading(false);
           return setErrorMessage(data.message);
         }
         setLoading(false);
 
         if (res.ok) {
+          setLoading(false);
           return navigate("/sign-in");
         }
       } catch (error) {
