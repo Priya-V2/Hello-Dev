@@ -25,7 +25,7 @@ export default function Home() {
 
       if (res.ok) {
         setPosts(data.posts);
-        if (data.posts.length < 9) {
+        if (data.posts.length < 8) {
           setShowMore(false);
         }
       }
@@ -40,7 +40,7 @@ export default function Home() {
       const data = await res.json();
       if (res.ok) {
         setPosts((prev) => [...prev, ...data.posts]);
-        if (data.posts.length < 9) {
+        if (data.posts.length < 8) {
           setShowMore(false);
         }
       }
@@ -164,7 +164,7 @@ export default function Home() {
         {showMore && (
           <button
             onClick={handleShowMore}
-            className="w-full text-blue-700 text-sm text-center py-6 hover:underline"
+            className="w-full text-blue-700 text-base text-center py-6 hover:underline"
           >
             Show more
           </button>
