@@ -26,8 +26,22 @@ const signup = async (req, res, next) => {
       return next(errorHandler(400, "All fields are required"));
     }
 
+    if (username !== username.toLowerCase()) {
+      return next(errorHandler(400, "Username must be lowercase"));
+    }
+
+    if (!username.match(/^[a-z0-9_]+$/)) {
+      return next(
+        errorHandler(400, "Username can only contain letters and numbers")
+      );
+    }
+
     const randomSuffix = Math.random().toString(36).substring(2, 5);
     const finalUserName = username + randomSuffix;
+
+    if (req.body.password.length < 6) {
+      return next(errorHandler(400, "Password must be atleast 6 characters"));
+    }
 
     const hashedPassword = bcryptjs.hashSync(password, 10);
 
