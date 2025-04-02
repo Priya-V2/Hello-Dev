@@ -60,11 +60,10 @@ const getUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   const { username, email, profilePicture } = await req.body;
-  // const password = req.body.password ? req.body.password : false;
 
   const existingUser = await User.findOne({ username });
 
-  if (existingUser) {
+  if (existingUser.email !== email) {
     return next(errorHandler(409, "Existing username"));
   }
 
@@ -185,3 +184,35 @@ export {
   deleteUser,
   signoutUser,
 };
+
+/*
+
+Search URL to Home
+
+Signup - Signin with JWT
+
+Signin - google
+
+Home - about - topics
+
+Home - explore posts - show more - search - postpage - home - topics
+
+views - like - share - save - comment
+
+profile - user - image - formdata - saved & liked post
+ 
+responsiveness 
+
+admin dashboard tour
+
+create post - update post
+
+code base tour
+
+mongoDB database tour
+
+
+
+
+
+ */
