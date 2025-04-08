@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth.route.js";
 import postRoutes from "./routes/post.route.js";
 import settingsRoutes from "./routes/settings.route.js";
 import commentRoutes from "./routes/comment.route.js";
+import interactionRoutes from "./routes/interaction.route.js";
 import "./config/auth.config.js";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -47,6 +48,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/api/interaction", interactionRoutes);
 
 mongoose
   .connect(process.env.MONGODB_URI)

@@ -125,35 +125,6 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-const updateBookmark = async (req, res, next) => {
-  try {
-    const { postId, userId } = req.params;
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return next(errorHandler(404, "User not found"));
-    }
-
-    if (user.bookmarks.includes(postId)) {
-      user.bookmarks = user.bookmarks.filter((bookmark) => bookmark !== postId);
-    } else {
-      user.bookmarks.push(postId);
-    }
-
-    await User.findByIdAndUpdate(
-      userId,
-      {
-        $set: { bookmarks: user.bookmarks },
-      },
-      { returnDocument: "after" }
-    );
-
-    res.status(200).json("Bookmark updated");
-  } catch (error) {
-    next(error);
-  }
-};
-
 const deleteUser = async (req, res, next) => {
   if (!req.user.isAdmin && req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You are not allowed to delete this user"));
@@ -181,39 +152,6 @@ export {
   getUsers,
   getUser,
   updateUser,
-  updateBookmark,
   deleteUser,
   signoutUser,
 };
-
-/*
-
-Search URL to Home
-
-Signup - Signin with JWT
-
-Signin - google
-
-Home - about - topics
-
-Home - explore posts - show more - search - postpage - home - topics
-
-views - like - share - save - comment
-
-profile - user - image - formdata - saved & liked post
- 
-responsiveness 
-
-admin dashboard tour
-
-create post - update post
-
-code base tour
-
-mongoDB database tour
-
-
-
-
-
- */
