@@ -14,7 +14,7 @@ export default function DashLikedPosts() {
     const fetchUser = async () => {
       try {
         const res = await fetch(
-          `/api/post/get-multiple-posts/like/${currentUser._id}`,
+          `/api/interaction/get-multiple-posts/like/${currentUser._id}`,
           {
             method: "GET",
           }
@@ -38,7 +38,7 @@ export default function DashLikedPosts() {
   const handleDelete = async () => {
     try {
       const res = await fetch(
-        `/api/post/delete-bookmark/${postIdToDelete}/${currentUser._id}`,
+        `/api/interaction/delete-like/${postIdToDelete}/${currentUser._id}`,
         {
           method: "DELETE",
         }

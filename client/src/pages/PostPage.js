@@ -94,7 +94,7 @@ export default function PostPage() {
       }
 
       const res = await fetch(
-        `/api/post/update-like/${post._id}/${currentUser._id}`,
+        `/api/interaction/update-like/${post._id}/${currentUser._id}`,
         {
           method: "PUT",
         }
@@ -134,7 +134,7 @@ export default function PostPage() {
 
     try {
       const res = await fetch(
-        `/api/user/update-bookmark/${postId}/${currentUser._id}`,
+        `/api/interaction/update-bookmark/${postId}/${currentUser._id}`,
         {
           method: "PUT",
         }

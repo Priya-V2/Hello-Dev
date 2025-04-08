@@ -14,7 +14,7 @@ export default function DashBookmark() {
     const fetchUser = async () => {
       try {
         const res = await fetch(
-          `/api/post/get-multiple-posts/bookmark/${currentUser._id}`,
+          `/api/interaction/get-multiple-posts/bookmark/${currentUser._id}`,
           {
             method: "GET",
           }
@@ -38,7 +38,7 @@ export default function DashBookmark() {
   const handleDelete = async () => {
     try {
       const res = await fetch(
-        `/api/post/delete-bookmark/${postIdToDelete}/${currentUser._id}`,
+        `/api/interaction/delete-bookmark/${postIdToDelete}/${currentUser._id}`,
         {
           method: "DELETE",
         }
