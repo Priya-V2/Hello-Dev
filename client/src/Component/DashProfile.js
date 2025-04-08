@@ -95,21 +95,25 @@ export default function DashProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setUpdateSuccess(null);
     setUpdateError(null);
+
     if (Object.keys(formData).length === 0) {
       setUpdateError("No changes made");
       return;
     }
+
     if (imageFileUploading) {
       setUpdateError("Please wait for image to upload");
     }
+    
     try {
       dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({...formData, email: currentUser.email}),
       });
 
       const data = await res.json();

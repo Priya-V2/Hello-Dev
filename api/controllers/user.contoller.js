@@ -61,7 +61,7 @@ const getUser = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
   const { username, email, profilePicture } = await req.body;
 
-  const existingUser = await User.findOne({ username });
+  const existingUser = await User.findOne({ email });
 
   if (existingUser.email !== email) {
     return next(errorHandler(409, "Existing username"));
@@ -118,6 +118,7 @@ const updateUser = async (req, res, next) => {
       { new: true }
     );
     const { password, ...rest } = updatedUser._doc;
+    console.log(rest)
     res.status(200).json(rest);
   } catch (error) {
     next(error);
