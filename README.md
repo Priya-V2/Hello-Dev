@@ -2,7 +2,7 @@
 
 ## 🌟 Overview
 
-This is a **full-stack blogging platform** built with the **MERN stack** (MongoDB, Express, React, Node.js). It features a **fully functional admin panel**, a user-friendly dashboard, and a dynamic post management system. The platform allows users to **create, read, update, and delete posts**, interact through comments and likes, and organize content using tags.
+This is a **full-stack blogging platform** built with the **MERN stack** (MongoDB, Express, React, Node.js). It features a **fully functional admin panel**, a **user-friendly dashboard**, and a **dynamic post management system**. The platform enables **admins to create, read, update, and delete posts**, while users can view posts, engage through comments and likes, and save posts to their profiles.
 
 **Live Link:** https://hello-dev.onrender.com/
 
@@ -11,7 +11,7 @@ This is a **full-stack blogging platform** built with the **MERN stack** (MongoD
 ### **🔹 Admin Panel**
 
 - Create and publish blog posts (stored in **MongoDB** and fetched dynamically).
-- Update existing posts.
+- Update and delete existing posts.
 - **Dashboard Overview** displaying:
   - Total posts
   - Total views, comments, and likes
@@ -43,8 +43,9 @@ This is a **full-stack blogging platform** built with the **MERN stack** (MongoD
   - **X (formerly Twitter)**
   - **Email**
 - **Bookmark button** for saving posts.
+- **Like button** to express their feelings
 - **Fully functional comment system** (comment, edit, delete, like comments).
-- Code snippets are **highlighted using Highlight.js **for better readability.
+- Code snippets are **highlighted using Highlight.js** for better readability.
 
 ### **🔹 Authentication & Security**
 
@@ -54,20 +55,21 @@ This is a **full-stack blogging platform** built with the **MERN stack** (MongoD
 ## 🛠️ Tech Stack
 
 - **Frontend:** React, Redux, Tailwind CSS
-- **Backend:** Node.js, Express
+- **Backend:** Node.js, Express, Mongoose
 - **Database:** MongoDB
 - **Authentication:** JWT, Passport.js (OAuth)
-- **Syntax Highlighting:** Highlight.js
+- **Version Control:**  Git, GitHub
+- **Others:** React Router DOM, React Quill, Highlight.js, Bcrypt.js, Highlight.js, Firebase, Render(deployment)
 
 ## 📂 Folder Structure
 ```
 📦 project-root
  ┣ 📂 api                   # Backend (Node.js, Express, MongoDB)
- ┃ ┣ 📂 config              # Configuration files (e.g., database connection, environment variables)
- ┃ ┣ 📂 controllers         # Handles business logic and request processing
+ ┃ ┣ 📂 config              # Auth Configuration file
+ ┃ ┣ 📂 controllers         # Handles backend logic and request processing
  ┃ ┣ 📂 models              # Defines MongoDB schemas and database interactions
  ┃ ┣ 📂 routes              # API endpoints and route handling
- ┃ ┣ 📂 utils               # Utility functions and helper methods
+ ┃ ┣ 📂 utils               # Utility functions
  ┃ ┣ index.js               # Entry point for the backend server
  ┣ 📂 client                # Frontend (React, Redux, Tailwind CSS)
  ┃ ┣ 📂 public              # Static files (e.g., favicon, images, index.html)
