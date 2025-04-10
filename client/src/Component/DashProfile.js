@@ -169,7 +169,7 @@ export default function DashProfile() {
   };
 
   return (
-    <div className="font-roboto text-base text-dark-charcoal max-w-sm mx-auto w-full">
+    <div className="font-roboto text-base text-dark-charcoal max-w-sm mx-auto w-full sm:p-0 px-8">
       <h1 className="font-medium text-2xl text-center mt-6 mb-4">Profile</h1>
       <form onSubmit={handleSubmit} className="flex flex-col">
         <input

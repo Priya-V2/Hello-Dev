@@ -55,7 +55,7 @@ export default function DashLikedPosts() {
   };
 
   return (
-    <div className="table-auto min-h-screen xl:mx-auto overflow-auto">
+    <div className="table-auto min-h-screen xl:mx-auto overflow-auto px-4">
       {error && (
         <div className="text-red-700 bg-red-100 my-8 p-2 rounded-sm font-medium text-center">
           <span>{error}</span>
